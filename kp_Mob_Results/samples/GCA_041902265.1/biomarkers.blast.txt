@@ -1,0 +1,2 @@
+qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
+CP024554_00008|ColRNAI_rep_cluster_1987	CP152665.1	411	4841	3	411	2301	2708	411	20	93.917	99.0	99.0	plus	7.22e-177	616	replicon

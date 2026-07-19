@@ -1,0 +1,12 @@
+sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
+GCA_012972045.1	chromosome	-	-	CP052608.1	5287060	0.5740320707538783	b8920f1f3a7c8bd54b23fd3cb2bdb03b	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_012972045.1	plasmid	AA277	AI089	CP052609.1	192686	0.5200170225133118	a989229e7a632bef5293c044bd67d43a	incomplete	IncFIB,IncFII	000107__CP014778_00094,000124__KP125893_00142	MOBF,MOBF	NC_021231_00058,CP035180_00077	MPF_F,MPF_F,MPF_F,MPF_F,MPF_F,MPF_F,MPF_F,MPF_F,MPF_F,MPF_F,MPF_T,MPF_T	NC_019155_00032,NC_019165_00034,NC_021654_00016,NC_011281_00082,NC_022609_00081,NC_014312_00128,NC_019389_00068,NC_023332_00154,NC_014312_00118,NC_014312_00116,NC_021502_00150,NC_021502_00131	-	-	-	CP034282	4.76906e-05	Klebsiella pneumoniae	-	-	-
+GCA_012972045.1	chromosome	-	-	CP052610.1	100875	0.5685353159851301	01a03a5623dca5455f1f5ee26f789896	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_012972045.1	plasmid	AA110	AH731	CP052611.1	3991	0.44349787020796794	6476698d3f96700e74c81adc6d505d14	incomplete	ColRNAI_rep_cluster_1987	CP041116_00002	-	-	-	-	-	-	-	CP036325	0.000239895	Klebsiella pneumoniae	-	-	-
+GCA_012972045.1	chromosome	-	-	CP052612.1	2877	0.5290232881473758	e18b231e4f9d1e088da1712b8f726d05	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	CP016586.1	23s-rRNA	repetitve element
+GCA_012972045.1	chromosome	-	-	CP052613.1	1278	0.5312989045383412	73096190115e033417536de2bc0bfc85	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	CP016586.1	16s-rRNA	repetitve element
+GCA_012972045.1	chromosome	-	-	CP052614.1	425	0.52	ab6640c08c4294a1fe9a61bd95db9a15	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_012972045.1	chromosome	-	-	CP052615.1	313	0.6070287539936102	c23122d78ea03428787d712c02eb2e78	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_012972045.1	chromosome	-	-	CP052616.1	313	0.6070287539936102	88fd2e91f8411710adbde1d4dd3fcb26	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_012972045.1	chromosome	-	-	CP052617.1	305	0.6131147540983607	b3f9819995141d5f8b53542f34a0fa8a	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_012972045.1	chromosome	-	-	CP052618.1	235	0.502127659574468	f6d3c856428d23c0666c5e2e2c334ef2	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-

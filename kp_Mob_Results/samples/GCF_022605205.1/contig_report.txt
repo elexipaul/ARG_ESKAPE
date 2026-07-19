@@ -1,0 +1,2 @@
+sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
+GCF_022605205.1	chromosome	-	-	NZ_CP093265.1	5613630	0.5739832166275977	ee7206989b2a0391e08acdc72870fca1	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-

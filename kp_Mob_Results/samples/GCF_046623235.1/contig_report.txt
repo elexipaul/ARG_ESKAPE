@@ -1,0 +1,3 @@
+sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
+GCF_046623235.1	chromosome	-	-	NZ_CP176946.1	5208961	0.575246963837894	433d50f84f69e19bec681d7c08654025	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCF_046623235.1	plasmid	AA406	AI454	NZ_CP176947.1	211565	0.4964526268522676	6dc487dee485cb39da5d5b9ec222c966	incomplete	IncFIB	000107__CP014778_00094	-	-	-	-	-	-	-	CP026166	2.38274e-05	Klebsiella pneumoniae	-	-	-

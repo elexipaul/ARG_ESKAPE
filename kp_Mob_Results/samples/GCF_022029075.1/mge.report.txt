@@ -1,0 +1,4 @@
+sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	mge_id	mge_acs	mge_type	mge_subtype	mge_length	mge_start	mge_end	contig_start	contig_end	length	sstrand	qcovhsp	pident	evalue	bitscore
+GCF_022029075.1	chromosome			NZ_CP091830.1	5491410	0.5736900205339419	6ebdc07d94386b49401f3c40ff7a7b8d	00634	CP024842	IS1400	IS3	1207	1	1197	591651	592846						
+GCF_022029075.1	chromosome			NZ_CP091830.1	5491410	0.5736900205339419	6ebdc07d94386b49401f3c40ff7a7b8d	00634	CP024842	IS1400	IS3	1207	1	1193	598414	599605						
+GCF_022029075.1	chromosome			NZ_CP091830.1	5491410	0.5736900205339419	6ebdc07d94386b49401f3c40ff7a7b8d	01169	KY174332	ISKpn24	IS66	2454	1	2454	2383277	2385730						

@@ -1,0 +1,9 @@
+sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
+GCF_033863975.1	chromosome	-	-	NZ_CP138815.1	5279772	0.5742833213252391	eafb9fc6f61505d3f7983696abc7be5c	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCF_033863975.1	plasmid	AA402	AI429	NZ_CP138816.1	255905	0.511631269416385	6ba7921560fbefd45c766ddbefca05c2	incomplete	IncFIB,IncFII,IncHI1B,IncQ1,IncU,rep_cluster_2183	000107__CP014778_00094,000129__CP018340,JN420336,000195__NC_013728_00014,000212__CP012556_00176,CP033468_00001	-	-	-	-	-	-	-	CP043934	0.0132573	Klebsiella pneumoniae	-	-	-
+GCF_033863975.1	plasmid	AA449	AI534	NZ_CP138817.1	51573	0.5202722354720494	e9a9239797234be01ba7a39359ebcf7c	incomplete	rep_cluster_1418	000759__NC_013950_00034	-	-	-	-	-	-	-	CP028553	0.0230043	Klebsiella variicola	-	-	-
+GCF_033863975.1	plasmid	AA402	AI429	NZ_CP138818.1	38026	0.5341608373218324	45c8c9f09bb8db4b098321c762f8c8b2	incomplete	rep_cluster_1254	000562__KT346360_00001	-	-	-	-	-	-	-	CP043934	0.0132573	Klebsiella pneumoniae	-	-	-
+GCF_033863975.1	plasmid	AA402	AI429	NZ_CP138819.1	3105	0.47342995169082125	d3433937c1aa0d7a4fcc43666a6ee5bc	incomplete	-	-	-	-	-	-	-	-	-	CP043934	0.0132573	Klebsiella pneumoniae	-	-	-
+GCF_033863975.1	chromosome	-	-	NZ_CP138820.1	931	0.43071965628356607	0dfc92f3df2969d686b55b17f98c8bd8	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCF_033863975.1	chromosome	-	-	NZ_CP138821.1	604	0.5380794701986755	52b1c491e2f1a4e7f6f963cf4bfd9c47	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCF_033863975.1	chromosome	-	-	NZ_CP138822.1	341	0.6011730205278593	de72fbb8ec38d802183b690946cbdd67	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-

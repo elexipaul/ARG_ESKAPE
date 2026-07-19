@@ -1,0 +1,5 @@
+qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
+000130__CP023489|IncFII	CP152692.1	235	74912	5	230	37387	37610	226	9	95.133	96.0	96.0	minus	9.77e-99	355	replicon
+CP017721_00179|rep_cluster_2183	CP152692.1	864	74912	1	864	37619	38482	865	144	83.121	100.0	100.0	plus	0.0	787	replicon
+000207__CP025517|IncR	CP152692.1	867	74912	3	867	47560	48424	865	16	98.15	99.0	99.0	minus	0.0	1509	replicon
+CP045692_00039|MOBF	CP152692.1	1300	74912	1	1133	29984	33388	1137	25	97.274	87.0	99.0	plus	0.0	2216	relaxase

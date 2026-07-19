@@ -1,0 +1,2 @@
+qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
+000107__CP014778_00094|IncFIB	CP195784.1	1011	5491969	1	1011	4803294	4804304	1011	2	99.802	100.0	100.0	minus	0.0	1857	replicon

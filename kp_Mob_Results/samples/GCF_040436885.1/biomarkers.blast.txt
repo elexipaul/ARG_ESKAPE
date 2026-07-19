@@ -1,0 +1,4 @@
+qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
+NZ_CP016035|MOBF	NZ_CP159154.1	268	76253	11	268	1038	1296	264	38	81.439	96.0	96.0	minus	1.1999999999999998e-53	206	oriT
+AF250878|IncFIA	NZ_CP159154.1	388	76253	2	388	2980	3366	387	6	98.45	99.0	99.0	plus	0.0	682	replicon
+000204__CP008701_00115|IncR	NZ_CP159154.1	894	76253	1	894	57044	57939	896	3	99.442	100.0	100.0	plus	0.0	1626	replicon

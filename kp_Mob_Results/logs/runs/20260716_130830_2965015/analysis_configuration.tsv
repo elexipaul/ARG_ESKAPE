@@ -1,0 +1,33 @@
+pipeline_version	4.0.0
+mob_recon_version	3.1.9
+database_directory	/home/bioinfo/anaconda3/envs/plasmid/lib/python3.11/site-packages/mob_suite/databases
+database_signature	61242f66bc4ad8c15390bfed1e6689b04eb527b33060ee8e3761c41b2509ab8f
+filter_db	
+filter_signature	NONE
+genome_filter_db_prefix	
+genome_filter_signature	NONE
+threads_per_job	2
+unicycler_assembly	false
+run_overhang	true
+keep_tmp	false
+debug_mode	false
+max_contig_size	1000000
+max_plasmid_size	1000000
+min_length	1000
+min_overlap	10
+min_rep_ident	80
+min_mob_ident	75
+min_con_ident	80
+min_rpp_ident	80
+min_rep_cov	80
+min_mob_cov	80
+min_con_cov	60
+min_rpp_cov	80
+min_rep_evalue	1e-05
+min_mob_evalue	1e-05
+min_con_evalue	1e-05
+min_rpp_evalue	1e-05
+primary_cluster_dist	0.06
+secondary_cluster_dist	0.025
+mash_genome_neighbor_threshold	0.002
+configuration_hash	a18818b42474238fd99a580e53414d1ca89a9f90c91d60060342630f24c1a7da

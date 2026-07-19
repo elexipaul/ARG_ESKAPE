@@ -1,0 +1,3 @@
+sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
+GCF_053078365.1	chromosome	-	-	NZ_CP182692.1	5199267	0.5758546348937263	2045c933dbb86f08ad50a226ed0731b1	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCF_053078365.1	plasmid	AB047	-	NZ_CP182693.1	5024	0.5392117834394905	f6a4c2c11852569cf3aa15b440ee7dea	incomplete	ColRNAI_rep_cluster_1987	CP041116_00002	-	-	-	-	-	-	-	CP019902	0.025894	Raoultella planticola	-	-	-

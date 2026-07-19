@@ -1,0 +1,2 @@
+sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
+GCA_041897575.1	chromosome	-	-	CP152700.1	5303641	0.5753275909889074	dfece7dda8cadd50ffc5f91d1b3b18c1	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-

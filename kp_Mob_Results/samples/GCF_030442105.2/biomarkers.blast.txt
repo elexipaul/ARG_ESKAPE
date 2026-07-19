@@ -1,0 +1,5 @@
+qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
+000107__CP014778_00094|IncFIB	NZ_CP132965.1	1011	191559	1	1011	1	1011	1011	5	99.505	100.0	100.0	plus	0.0	1840	replicon
+JN420336|IncHI1B	NZ_CP132965.1	570	191559	1	570	15314	15883	570	5	99.123	100.0	100.0	plus	0.0	1026	replicon
+NC_016980_00239|MOBH	NZ_CP132965.1	982	191559	1	982	166598	169528	982	66	92.77	100.0	100.0	plus	0.0	1758	relaxase
+NC_018107_00101|MPF_F	NZ_CP132965.1	480	191559	2	480	159909	161345	479	16	96.66	99.0	99.0	minus	0.0	925	mate-pair-formation

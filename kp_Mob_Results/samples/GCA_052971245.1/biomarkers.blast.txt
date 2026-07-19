@@ -1,0 +1,5 @@
+qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
+JN420336|IncHI1B	CP167348.1	570	190270	1	570	173898	174467	570	5	99.123	100.0	100.0	minus	0.0	1026	replicon
+000107__CP014778_00094|IncFIB	CP167348.1	1011	190270	1	1011	188896	189906	1011	5	99.505	100.0	100.0	minus	0.0	1840	replicon
+NC_016980_00239|MOBH	CP167348.1	982	190270	1	982	21668	24598	982	66	92.77	100.0	100.0	minus	0.0	1758	relaxase
+NC_018107_00101|MPF_F	CP167348.1	480	190270	2	480	29851	31287	479	16	96.66	99.0	99.0	plus	0.0	925	mate-pair-formation

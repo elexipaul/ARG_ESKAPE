@@ -1,0 +1,5 @@
+qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
+NZ_CP013834|MOBF	CP154464.1	259	25445	1	259	19738	19996	262	28	87.023	100.0	100.0	plus	3e-79	291	oriT
+CP016722|MOB_unknown	CP154465.1	218	4267	1	218	1521	1738	220	15	91.364	100.0	100.0	plus	1.48e-81	298	oriT
+000759__NC_013950_00034|rep_cluster_1418	CP154464.1	876	25445	1	876	12808	13683	876	6	99.315	100.0	100.0	minus	0.0	1585	replicon
+CP041116_00002|ColRNAI_rep_cluster_1987	CP154465.1	519	4267	38	515	1058	1539	487	25	91.992	92.0	92.0	minus	0.0	671	replicon

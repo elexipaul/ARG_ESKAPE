@@ -1,0 +1,4 @@
+sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
+GCA_041902265.1	chromosome	-	-	CP152664.1	5238157	0.5748294676925492	ffcabbb73afe9385a1d30351bfc03151	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_041902265.1	plasmid	AA107	AH728	CP152665.1	4841	0.4317289816153687	aeedd5fa824ec08d6be6aed7b31412d5	incomplete	ColRNAI_rep_cluster_1987	CP024554_00008	-	-	-	-	-	-	-	KU302807	0.0237537	Enterobacter cloacae	-	-	-
+GCA_041902265.1	chromosome	-	-	CP152666.1	2353	0.351891202719932	41f18b892a43ba1ccbf71bcffa17f68e	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-

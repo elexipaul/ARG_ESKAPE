@@ -1,0 +1,12 @@
+pipeline_version	4.0.0
+configuration_hash	a18818b42474238fd99a580e53414d1ca89a9f90c91d60060342630f24c1a7da
+mob_recon_version	3.1.9
+input_path	/mnt/data/pranjal/ESKAPE_ARG_GENE_FAMILY/ESKAPE_AMR/kp_fna/GCF_011045595.1.fna
+input_sha256	be81a94b4cddfb942ba7be2a00c2930cfcbff1529fadff02b836fa5f518758f5
+completed_at	2026-07-16 15:43:48
+contig_records	1
+plasmid_records	0
+plasmid_fasta_files	0
+contig_report_sha256	139b60f5243ce451f42938c88789e60b5ecdf849dec1ab72b4c9b169c0fac63b
+mobtyper_report_sha256	NONE
+output_fasta_signature	268a2eb0c563df02e496f04ee03c0f5cc4050d736b03d807b530fe7e8c92b885

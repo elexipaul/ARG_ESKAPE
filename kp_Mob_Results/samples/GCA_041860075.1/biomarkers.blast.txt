@@ -1,0 +1,3 @@
+qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
+CP001126_00001|Col156	CP154489.1	936	5463	1	776	1	776	776	24	96.907	83.0	83.0	plus	0.0	1301	replicon
+NC_019783_00003|MOBQ	CP154489.1	308	5463	1	308	1856	2779	308	6	98.052	100.0	100.0	plus	0.0	627	relaxase

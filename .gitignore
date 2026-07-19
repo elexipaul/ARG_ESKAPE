@@ -1,0 +1,54 @@
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Secrets / local config
+.env
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.idea/
+
+# Raw + intermediate sequencing data
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.bam
+*.bam.bai
+*.sam
+*.cram
+*.cram.crai
+*.vcf.gz
+*.vcf.gz.tbi
+
+# Reference genomes/indices
+*.fa
+*.fasta
+*.fa.fai
+*.dict
+ref/
+*.bt2
+*.amb
+*.ann
+*.bwt
+*.pac
+*.sa
+
+# Generated outputs
+results/
+output/
+qc/
+*.log
+

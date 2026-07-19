@@ -1,0 +1,12 @@
+sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
+GCA_012972285.1	chromosome	-	-	CP052574.1	5284435	0.5740165221069046	825bf3776edac9ad922d8d4ba4dabb0a	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_012972285.1	plasmid	AA277	AI089	CP052575.1	192688	0.5200116250103795	5bb3a3b4e7d0167aca52a249dcd0f3a4	incomplete	IncFIB,IncFII	000107__CP014778_00094,000124__KP125893_00142	MOBF,MOBF	NC_021231_00058,CP035180_00077	MPF_F,MPF_F,MPF_F,MPF_F,MPF_F,MPF_F,MPF_F,MPF_F,MPF_F,MPF_F,MPF_T,MPF_T	NC_019155_00032,NC_019165_00034,NC_021654_00016,NC_011281_00082,NC_022609_00081,NC_014312_00128,NC_019389_00068,NC_023332_00154,NC_014312_00118,NC_014312_00116,NC_021502_00150,NC_021502_00131	-	-	-	CP034282	4.76906e-05	Klebsiella pneumoniae	-	-	-
+GCA_012972285.1	chromosome	-	-	CP052576.1	100875	0.5685353159851301	cfc313a23c57667ac3ee3cba3f4ae703	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_012972285.1	chromosome	-	-	CP052577.1	1543	0.524303305249514	9c384a22ec854a92b9916a1aab11408e	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_012972285.1	chromosome	-	-	CP052578.1	1313	0.5354150799695354	40fb70b19bbc34295ee779d379bc6f97	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	CP016586.1	23s-rRNA	repetitve element
+GCA_012972285.1	chromosome	-	-	CP052579.1	1278	0.5305164319248826	e40d2d95608f7c688dd1bac8edc63d17	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	CP016586.1	16s-rRNA	repetitve element
+GCA_012972285.1	chromosome	-	-	CP052580.1	425	0.52	ab6640c08c4294a1fe9a61bd95db9a15	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_012972285.1	chromosome	-	-	CP052581.1	313	0.6070287539936102	521a3caaaaa602cfc98ccdcec7c00ec5	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_012972285.1	chromosome	-	-	CP052582.1	313	0.6070287539936102	c23122d78ea03428787d712c02eb2e78	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_012972285.1	chromosome	-	-	CP052583.1	305	0.6131147540983607	b3f9819995141d5f8b53542f34a0fa8a	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_012972285.1	chromosome	-	-	CP052584.1	235	0.502127659574468	f6d3c856428d23c0666c5e2e2c334ef2	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-

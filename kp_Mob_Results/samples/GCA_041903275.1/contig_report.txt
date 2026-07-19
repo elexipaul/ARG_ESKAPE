@@ -1,0 +1,3 @@
+sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
+GCA_041903275.1	chromosome	-	-	CP152840.1	5302709	0.5747628240584199	e390409624807c96b8f6a558a970f7e0	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+GCA_041903275.1	plasmid	novel_638891ed2550ad84bc74253e588dd18d	-	CP152841.1	4652	0.43336199484092863	638891ed2550ad84bc74253e588dd18d	incomplete	ColRNAI_rep_cluster_1987	CP024554_00008	-	-	-	-	-	-	-	CP041116	0.0608169	Escherichia coli	-	-	-

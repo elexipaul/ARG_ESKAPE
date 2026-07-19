@@ -1,0 +1,2 @@
+qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
+CP041116_00002|ColRNAI_rep_cluster_1987	NZ_CP182693.1	519	5024	42	519	3351	3835	488	35	90.164	92.0	92.0	minus	5.47e-179	623	replicon

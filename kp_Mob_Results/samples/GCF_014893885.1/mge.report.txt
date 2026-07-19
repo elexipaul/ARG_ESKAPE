@@ -1,0 +1,5 @@
+sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	mge_id	mge_acs	mge_type	mge_subtype	mge_length	mge_start	mge_end	contig_start	contig_end	length	sstrand	qcovhsp	pident	evalue	bitscore
+GCF_014893885.1	chromosome			NZ_VXCG01000026.1	74183	0.5454888586333796	8afcbb9dc7b829f38445aff9a398600c	01320	CP016763	ISCfr12	ISL3	1316	1	1316	72753	74068						
+GCF_014893885.1	chromosome			NZ_VXCG01000073.1	5229	0.525062656641604	1346f88286794a92bb3b6363cd639a9f	01400	CP016586.1	23s-rRNA	23S	3027	660	3027	57	2424						
+GCF_014893885.1	chromosome			NZ_VXCG01000073.1	5229	0.525062656641604	1346f88286794a92bb3b6363cd639a9f	01399	CP016586.1	16s-rRNA	16S	1554	1	1554	3534	5085						
+GCF_014893885.1	chromosome			NZ_VXCG01000092.1	1205	0.5360995850622406	8af6fe84d099b42206feedfbccaf8dda	00918	LT898486	ISKpn26	IS5	1197	1	1196	6	1201						
