@@ -1,8 +1,0 @@
-sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
-GCA_026256425.1	plasmid	AE958	AO846	CP110757.1	103831	0.5182363648621318	502ffa7470859d7c0bdb956e0eff72f2	incomplete	rep_cluster_2470	CP037443_00001	-	-	-	-	-	-	-	CP037443	0.0134036	Klebsiella sp. PO552	-	-	-
-GCA_026256425.1	chromosome	-	-	CP110758.1	124255	0.5349563397851194	f90cf0fd34d381f0fd7727de6ab80087	incomplete	IncR	000204__CP008701_00115	MOBC	NC_014725_00039	MPF_T,MPF_T,MPF_T	NC_011092_00103,NC_011092_00102,NC_011092_00100	-	-	-	-	-	-	-	-	-
-GCA_026256425.1	chromosome	-	-	CP110759.1	125521	0.5239760677496196	cb21079d5a4bef43d037774c58211896	incomplete	IncY	000230__CP009168_00001	-	-	-	-	MOBF	NZ_CP013834	-	-	-	-	-	-	-
-GCA_026256425.1	plasmid	AE809	-	CP110760.1	43158	0.35101255850595486	74d5a640a5a4c6f093065c0edeffd98c	incomplete	-	-	-	-	-	-	-	-	-	CP032206	0.0371871	Klebsiella pneumoniae	-	-	-
-GCA_026256425.1	chromosome	-	-	CP110761.1	11645	0.5610991841992271	32e388fd05413d569f4b62a2cbef92b1	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCA_026256425.1	chromosome	-	-	CP110762.1	5233063	0.5742300446220502	987447d1758dd6d2a1c0ce155f4ac9a0	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCA_026256425.1	chromosome	-	-	CP110763.1	11474	0.5887223287432456	089b887a4e01a3bf84c66708e7ea329a	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-

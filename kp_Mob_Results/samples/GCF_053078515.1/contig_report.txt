@@ -1,4 +1,0 @@
-sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
-GCF_053078515.1	chromosome	-	-	NZ_CP182729.1	5237722	0.5747149237779324	a8125d789c63381b243c868c08804aca	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCF_053078515.1	plasmid	AA402	-	NZ_CP182730.1	125752	0.5074909345378205	0b10398e57f9559dc1d661cbb4faa351	incomplete	IncFIB	000107__CP014778_00094	-	-	-	-	-	-	-	MK773537	0.0371871	Klebsiella pneumoniae	-	-	-
-GCF_053078515.1	plasmid	AB047	-	NZ_CP182731.1	5115	0.5372434017595308	1542e59dde76d12f7844dd421fb8fe0e	incomplete	ColRNAI_rep_cluster_1987	CP041116_00002	-	-	-	-	-	-	-	CP019902	0.0288636	Raoultella planticola	-	-	-

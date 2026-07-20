@@ -1,7 +1,0 @@
-sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
-GCA_041920775.1	chromosome	-	-	CP152969.1	5217588	0.5742643918990921	6e9badfa0201e21fdb1b43bff63e4086	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCA_041920775.1	plasmid	AD443	AN002	CP152970.1	138935	0.5163565696188865	095e4ebf2d6bfdada054baa4e575fe3d	incomplete	IncFIB	000107__CP014778_00094	-	-	-	-	-	-	-	CP025683	0.000385581	Klebsiella pneumoniae	-	-	-
-GCA_041920775.1	plasmid	AD338	-	CP152971.1	5905	0.49127857747671466	dde9cec628612d6e2f78a75891d09769	incomplete	Col(Ye4449)	FJ696405	MOBP	NC_017723_00002	-	-	-	-	-	FN649416	0.0579033	Escherichia coli ETEC H10407	-	-	-
-GCA_041920775.1	chromosome	-	-	CP152972.1	4069	0.37871712951585157	eaf57d9fed3d8deb4dc521189991a2f7	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCA_041920775.1	plasmid	AA119	AH746	CP152973.1	3718	0.46288327057557827	84875cc35c783bbe0f7dcd55720ae2ed	incomplete	ColRNAI_rep_cluster_1987	CP024554_00008	-	-	-	-	-	-	-	CP034764	0.000830728	Klebsiella pneumoniae	-	-	-
-GCA_041920775.1	chromosome	-	-	CP152974.1	2106	0.3380816714150047	1d307be16f268dcbd0f228679970412a	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-

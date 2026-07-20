@@ -1,4 +1,0 @@
-sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
-GCA_052975275.1	chromosome	-	-	CP167315.1	5213557	0.5755698077147713	99c02fda6c2801337dc579a3ea891f20	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCA_052975275.1	plasmid	AA397	AI419	CP167316.1	164926	0.50803390611547	9d8ab1a63e739bada2a92134d40cec64	incomplete	IncFIB,IncHI1B	000107__CP014778_00094,JN420336	-	-	-	-	-	-	-	CP019161	0.0150285	Klebsiella pneumoniae	-	-	-
-GCA_052975275.1	plasmid	AC125	AL184	CP167317.1	111461	0.4895613712419591	4bd2eba0ea338f21713aa57b712f8705	incomplete	IncFIB	000100__NZ_CP016161_00012	-	-	-	-	-	-	-	CP012427	0.0138485	Klebsiella pneumoniae	-	-	-

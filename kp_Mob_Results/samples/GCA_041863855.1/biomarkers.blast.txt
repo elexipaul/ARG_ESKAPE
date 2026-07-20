@@ -1,5 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-HQ328804|MOBP	CP153313.1	174	5251	1	174	4682	4855	176	23	84.659	100.0	100.0	plus	7.42e-44	172	oriT
-CP041116_00002|ColRNAI_rep_cluster_1987	CP153313.1	519	5251	2	519	4219	4736	520	30	93.462	99.0	99.0	minus	0.0	769	replicon
-NC_016979_00005|MOBP	CP153313.1	501	5251	1	501	28	1533	502	18	96.215	100.0	100.0	plus	0.0	947	relaxase
-NC_001848_00006|MOBP	CP153313.1	107	5251	1	95	4969	5250	95	5	93.684	89.0	89.0	plus	2.16e-55	182	relaxase

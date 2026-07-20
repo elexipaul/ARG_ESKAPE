@@ -1,2 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-000230__CP009168_00001|IncY	NZ_CP153843.1	861	98142	1	861	65735	66595	861	6	99.303	100.0	100.0	minus	0.0	1557	replicon

@@ -1,4 +1,0 @@
-sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
-GCA_041869845.1	chromosome	-	-	CP152586.1	5206013	0.5743742860419289	c07bdfd9f164ad786f262183d59c1432	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCA_041869845.1	chromosome	-	-	CP152587.1	225468	0.49420760373977685	afa25e69fdb54546fd780b9afec9a6d0	incomplete	IncFIB	000107__CP014778_00094	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCA_041869845.1	plasmid	AB047	AJ593	CP152588.1	4684	0.5469684030742955	a71b2cf4cefac7a99a4f90fc806ddadb	incomplete	ColRNAI_rep_cluster_1987	CP041116_00002	-	-	-	-	-	-	-	CP019902	0.0174761	Raoultella planticola	-	-	-

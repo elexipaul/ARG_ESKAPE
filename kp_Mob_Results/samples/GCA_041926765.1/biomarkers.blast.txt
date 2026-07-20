@@ -1,3 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-CP037443_00001|rep_cluster_2470	CP153345.1	1113	107178	1	1111	87470	88577	1113	87	91.554	99.0	99.0	minus	0.0	1528	replicon
-CP000974_00005|rep_cluster_2358	CP153346.1	528	2789	1	524	1866	2376	530	49	86.038	99.0	99.0	minus	1.3e-155	545	replicon

@@ -1,2 +1,0 @@
-sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
-GCF_000474015.1	chromosome	-	-	NC_022566.1	5166857	0.5762522554814271	3ae5e77c95acf8ef692b0875e0e2bd3a	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-

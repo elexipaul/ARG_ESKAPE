@@ -1,4 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-CP016722|MOB_unknown	NZ_CP067607.1	218	6542	1	218	4877	5093	221	30	83.258	100.0	100.0	plus	5.83e-51	196	oriT
-000759__NC_013950_00034|rep_cluster_1418	NZ_CP067606.1	876	52681	1	876	1	876	876	7	99.201	100.0	100.0	plus	0.0	1580	replicon
-CP039864_00003|rep_cluster_2401	NZ_CP067607.1	189	6542	2	189	4328	4514	188	11	93.617	99.0	99.0	plus	4.8e-76	279	replicon

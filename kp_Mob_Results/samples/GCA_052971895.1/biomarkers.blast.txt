@@ -1,3 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-JN420336|IncHI1B	CP167497.1	570	186608	1	570	27252	27821	570	4	99.298	100.0	100.0	minus	0.0	1031	replicon
-000107__CP014778_00094|IncFIB	CP167497.1	1011	186608	1	1011	45613	46623	1011	4	99.604	100.0	100.0	plus	0.0	1845	replicon

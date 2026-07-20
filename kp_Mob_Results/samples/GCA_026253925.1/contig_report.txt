@@ -1,4 +1,0 @@
-sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
-GCA_026253925.1	plasmid	AE809	-	CP110567.1	44274	0.35067985725256356	bb44fce1685ee5171d19df8acc7abde3	circular	-	-	-	-	-	-	-	-	-	CP021954	0.0262266	Klebsiella pneumoniae	-	-	-
-GCA_026253925.1	chromosome	-	-	CP110568.1	5222279	0.5758443775217678	4f3bcf6db8d07829c677a8815cf89a4b	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCA_026253925.1	plasmid	AC247	-	CP110569.1	42270	0.5133427963094394	17d62e070bc0e0ffa07d425287963a9b	incomplete	IncFIA	AF250878	-	-	-	-	MOBF	NZ_CP013834	-	LT985299	0.0480354	Escherichia coli	-	-	-

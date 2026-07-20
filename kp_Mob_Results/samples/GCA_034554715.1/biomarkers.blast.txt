@@ -1,3 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-NC_005814_00013|MPF_T	CP140610.1	227	5376998	1	227	3463339	3464019	227	7	96.916	100.0	100.0	plus	4.7000000000000005e-130	402	mate-pair-formation
-NC_010726_00014|MPF_T	CP140610.1	301	5376998	1	301	3464022	3464924	301	3	99.003	100.0	100.0	plus	0.0	617	mate-pair-formation

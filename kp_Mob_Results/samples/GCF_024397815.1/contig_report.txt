@@ -1,3 +1,0 @@
-sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
-GCF_024397815.1	chromosome	-	-	NZ_CP073076.1	5306902	0.5750528274311453	729e9c8b9c839bedd5b2c89025de85f9	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCF_024397815.1	plasmid	AA406	AI454	NZ_CP073077.1	204698	0.501455803183226	7400768032969153fe8445cdce486f56	incomplete	IncFIB,IncHI1B	000107__CP014778_00094,JN420336	-	-	-	-	-	-	-	LR134211	0.000119496	Klebsiella aerogenes	-	-	-

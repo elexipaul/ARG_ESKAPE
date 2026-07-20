@@ -1,3 +1,0 @@
-sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
-GCF_041765125.1	chromosome	-	-	NZ_CP153842.1	5405676	0.5731973207421236	a9fc1ac0e706db731f02c816a357eedb	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCF_041765125.1	plasmid	AA378	AI389	NZ_CP153843.1	98142	0.47948890383322124	3acbf0d2f367879f8e2cecc8907f1144	incomplete	IncY	000230__CP009168_00001	-	-	-	-	-	-	-	CP038506	0.0112201	Escherichia coli	-	-	-

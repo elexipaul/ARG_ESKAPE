@@ -52,3 +52,5 @@ output/
 qc/
 *.log
 
+CARD_Results/
+Results/

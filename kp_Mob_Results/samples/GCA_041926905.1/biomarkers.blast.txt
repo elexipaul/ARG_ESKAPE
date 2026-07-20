@@ -1,3 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-000107__CP014778_00094|IncFIB	CP153104.1	1011	129768	1	1011	111023	112033	1011	98	90.307	100.0	100.0	minus	0.0	1325	replicon
-CP032196_00054|rep_cluster_2469	CP153105.1	1113	108093	1	1113	67017	68129	1113	1	99.91	100.0	100.0	minus	0.0	2050	replicon

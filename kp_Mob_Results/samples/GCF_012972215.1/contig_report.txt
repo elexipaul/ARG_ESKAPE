@@ -1,9 +1,0 @@
-sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
-GCF_012972215.1	chromosome	-	-	NZ_CP052181.1	5091544	0.5751418430244343	d43934a43134bfed68f3c03832da461a	incomplete	-	-	MOBC	NC_009779_00002	MPF_T,MPF_T,MPF_T,MPF_T	NC_013284_00016,NC_010726_00011,NC_005814_00013,NC_010726_00014	-	-	-	-	-	-	-	-	-
-GCF_012972215.1	plasmid	AA406	AI454	NZ_CP052182.1	271740	0.5019319938176198	bfd6dfa838006e1c59b25a6efbcbec8b	incomplete	IncFIB,IncHI1B,IncR,rep_cluster_1254	000107__CP014778_00094,JN420336,000204__CP008701_00115,000562__KT346360_00001	-	-	-	-	-	-	-	CP026024	0.00363721	Klebsiella pneumoniae	-	-	-
-GCF_012972215.1	chromosome	-	-	NZ_CP052183.1	160614	0.5693339310396354	5a03df63f9c7f2d48b0228498dc00f57	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCF_012972215.1	chromosome	-	-	NZ_CP052184.1	27333	0.5683971755753119	a4f2cfd9d9fd9c0e5b1b6a752bfd5f85	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCF_012972215.1	plasmid	AA941	AJ417	NZ_CP052185.1	10071	0.5495978552278821	42dee50cd87d88efd816a420803b6867	incomplete	ColRNAI_rep_cluster_1857	000003__NC_002119_00001	MOBC	NC_009793_00003	-	-	-	-	-	CP024884	0.00181236	Klebsiella aerogenes	-	-	-
-GCF_012972215.1	chromosome	-	-	NZ_CP052186.1	1851	0.4932468935710427	cb196f2589cc4dc95a3c6189a875895f	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCF_012972215.1	chromosome	-	-	NZ_CP052187.1	768	0.5247395833333334	4db6d07b5ec0685d143c0d1d82dd2428	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCF_012972215.1	chromosome	-	-	NZ_CP052188.1	224	0.5133928571428571	6c9894a44ce3ce2e3aae1239d5ead9c5	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-

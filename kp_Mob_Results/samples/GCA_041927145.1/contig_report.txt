@@ -1,5 +1,0 @@
-sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
-GCA_041927145.1	chromosome	-	-	CP153267.1	5230471	0.575954058439479	331240fa5cd27218b267e78b745c533b	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCA_041927145.1	plasmid	AD443	AN002	CP153268.1	121129	0.5158962758711787	ed8ac4a21d3f266ac0bb5cabf7b22dc0	incomplete	IncFIB	000107__CP014778_00094	-	-	-	-	-	-	-	CP025683	0.00480022	Klebsiella pneumoniae	-	-	-
-GCA_041927145.1	plasmid	AF031	AO930	CP153269.1	108311	0.4923599634386166	0ebb225fa7ca6565557ad3ffbced3859	incomplete	rep_cluster_2469	CP032196_00054	-	-	-	-	-	-	-	CP027615	0.0249208	Klebsiella pneumoniae subsp. ozaenae	-	-	-
-GCA_041927145.1	chromosome	-	-	CP153270.1	51589	0.5299191688150575	7d0a548f6b9fc180b83f4b07decc7d38	incomplete	IncY	000230__CP009168_00001	-	-	-	-	-	-	-	-	-	-	-	-	-

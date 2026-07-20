@@ -1,5 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-CP017721_00179|rep_cluster_2183	NZ_CP155668.1	864	59221	37	864	199	1026	830	140	82.651	96.0	96.0	minus	0.0	732	replicon
-000128__CP023916|IncFII	NZ_CP155668.1	234	59221	1	234	1061	1294	234	0	100.0	100.0	100.0	plus	4.36e-122	433	replicon
-000204__CP008701_00115|IncR	NZ_CP155668.1	894	59221	1	894	27844	28739	896	12	98.438	100.0	100.0	minus	0.0	1576	replicon
-NC_019155_00032|MPF_F	NZ_CP155668.1	959	59221	1	778	18333	20666	778	16	97.943	81.0	81.0	minus	0.0	1473	mate-pair-formation

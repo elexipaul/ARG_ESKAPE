@@ -1,3 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-000107__CP014778_00094|IncFIB	NZ_CP145720.1	1011	198461	1	1011	1	1011	1011	3	99.703	100.0	100.0	plus	0.0	1851	replicon
-CP041116_00002|ColRNAI_rep_cluster_1987	NZ_CP145721.1	519	4091	3	516	1788	2313	529	40	89.036	99.0	99.0	plus	0.0	640	replicon

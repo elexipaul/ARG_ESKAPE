@@ -1,5 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-NC_010726_00014|MPF_T	NZ_CP170441.1	301	5326974	1	301	1770848	1771750	301	3	99.003	100.0	100.0	minus	0.0	617	mate-pair-formation
-NC_005814_00013|MPF_T	NZ_CP170441.1	227	5326974	1	227	1771753	1772433	227	7	96.916	100.0	100.0	minus	4.65e-130	402	mate-pair-formation
-NC_010726_00011|MPF_T	NZ_CP170441.1	358	5326974	5	358	1773431	1774492	354	49	86.158	99.0	99.0	minus	9.18e-177	542	mate-pair-formation
-NC_013284_00016|MPF_T	NZ_CP170441.1	914	5326974	1	914	1775490	1778225	914	84	90.591	100.0	100.0	minus	0.0	1720	mate-pair-formation

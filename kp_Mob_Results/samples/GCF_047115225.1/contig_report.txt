@@ -1,7 +1,0 @@
-sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
-GCF_047115225.1	chromosome	-	-	NZ_CP128623.1	5253607	0.5749388943634345	55e6b1e4064f34584e50be98cc4cc257	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCF_047115225.1	plasmid	AA402	AI429	NZ_CP128624.1	198141	0.5012339697488153	5614a74329585e43fe3cea110dbc8c7e	incomplete	IncFIB,IncHI1B,IncU	000107__CP014778_00094,JN420336,000212__CP012556_00176	-	-	-	-	-	-	-	CP021697	0.00853806	Klebsiella pneumoniae	-	-	-
-GCF_047115225.1	plasmid	AA556	-	NZ_CP128625.1	34166	0.5229760580694257	1766b64a6895d51d9947bec9425bc282	incomplete	IncR	000204__CP008701_00115	-	-	-	-	-	-	-	CP040697	0.0365754	Citrobacter freundii	-	-	-
-GCF_047115225.1	chromosome	-	-	NZ_CP128626.1	12211	0.3639341577266399	9916c846b09c195527d82e83b670b910	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	CP001182	IS15	repetitve element
-GCF_047115225.1	chromosome	-	-	NZ_CP128627.1	2876	0.46557719054242	9c31d424ec0a681d872f6087488bf7e9	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCF_047115225.1	chromosome	-	-	NZ_CP128628.1	2095	0.5002386634844869	3b56cffa64446b6967589325326222fe	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	CP016586.1	23s-rRNA	repetitve element

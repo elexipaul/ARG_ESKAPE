@@ -1,3 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-JN420336|IncHI1B	NZ_CP073077.1	570	204698	1	570	18521	19090	570	4	99.298	100.0	100.0	minus	0.0	1031	replicon
-000107__CP014778_00094|IncFIB	NZ_CP073077.1	1011	204698	1	1011	36666	37676	1011	4	99.604	100.0	100.0	plus	0.0	1845	replicon

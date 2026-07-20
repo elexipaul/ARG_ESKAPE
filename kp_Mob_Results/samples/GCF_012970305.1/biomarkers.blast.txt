@@ -1,4 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-000107__CP014778_00094|IncFIB	NZ_CP052485.1	1011	132769	1	1011	1	1011	1011	94	90.702	100.0	100.0	plus	0.0	1347	replicon
-000003__NC_002119_00001|ColRNAI_rep_cluster_1857	NZ_CP052486.1	582	9294	1	582	5279	5858	582	25	95.361	100.0	100.0	minus	0.0	924	replicon
-NC_009793_00003|MOBC	NZ_CP052486.1	243	9294	1	224	8621	9292	224	0	100.0	92.0	92.0	plus	8.939999999999999e-140	430	relaxase

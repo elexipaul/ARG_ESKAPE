@@ -1,5 +1,0 @@
-sample_id	molecule_type	primary_cluster_id	secondary_cluster_id	contig_id	size	gc	md5	circularity_status	rep_type(s)	rep_type_accession(s)	relaxase_type(s)	relaxase_type_accession(s)	mpf_type	mpf_type_accession(s)	orit_type(s)	orit_accession(s)	predicted_mobility	mash_nearest_neighbor	mash_neighbor_distance	mash_neighbor_identification	repetitive_dna_id	repetitive_dna_type	filtering_reason
-GCA_041860785.1	chromosome	-	-	CP152494.1	5524873	0.5748131190186456	daef6aa099946cb6148879230a83e187	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCA_041860785.1	chromosome	-	-	CP152495.1	54051	0.513737026141977	6d2e61d12e73feefade7b0813bc7c484	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCA_041860785.1	chromosome	-	-	CP152496.1	7660	0.49281984334203655	9df1fe4844e0de880d3c576b6f415f85	incomplete	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
-GCA_041860785.1	plasmid	novel_9e55d56e45c898cdbfb98e2a53a04d9a	-	CP152497.1	4093	0.3574395309064256	9e55d56e45c898cdbfb98e2a53a04d9a	incomplete	-	-	MOBQ	CP024518_00006	-	-	-	-	-	CP024498	0.0610707	Klebsiella pneumoniae	-	-	-

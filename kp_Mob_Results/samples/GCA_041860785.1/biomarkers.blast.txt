@@ -1,2 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-CP024518_00006|MOBQ	CP152497.1	389	4093	1	389	1745	2911	389	34	91.26	100.0	100.0	plus	0.0	642	relaxase

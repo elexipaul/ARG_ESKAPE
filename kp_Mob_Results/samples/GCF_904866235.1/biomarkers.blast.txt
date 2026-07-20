@@ -1,4 +1,0 @@
-qseqid	sseqid	qlen	slen	qstart	qend	sstart	send	length	mismatch	pident	qcovhsp	qcovs	sstrand	evalue	bitscore	biomarker
-CP017721_00179|rep_cluster_2183	NZ_LR890601.1	864	72169	37	864	31	858	830	146	81.928	96.0	96.0	plus	0.0	699	replicon
-AF250878|IncFIA	NZ_LR890601.1	388	72169	1	388	26476	26863	389	19	94.602	100.0	100.0	plus	1.98e-172	601	replicon
-CP041116_00002|ColRNAI_rep_cluster_1987	NZ_LR890602.1	519	6615	42	519	5293	5770	482	35	91.079	92.0	92.0	minus	0.0	645	replicon
