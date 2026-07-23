@@ -1,0 +1,53 @@
+ 1668  2026-07-21 11:57:07 wc -l Final_complete_id_list_2.txt
+ 1669  2026-07-21 15:12:20 mkdir -p DRUG_class_family_mapping
+ 1670  2026-07-21 15:12:55 cp AB_rgi_results/*/*.csv DRUG_class_family_mapping
+ 1671  2026-07-21 15:13:18 cp EF_rgi_results/*/*.csv DRUG_class_family_mapping
+ 1672  2026-07-21 15:13:27 cp ENT_rgi_results/*/*.csv DRUG_class_family_mapping
+ 1673  2026-07-21 15:13:38 cp Kp_rgi_results/*/*.csv DRUG_class_family_mapping
+ 1674  2026-07-21 15:13:48 cp Pa_rgi_results/*/*.csv DRUG_class_family_mapping
+ 1675  2026-07-21 15:14:05 cp SA_rgi_results/*/*.csv DRUG_class_family_mapping
+ 1676  2026-07-21 16:03:15 ls -lwr DRUG_class_family
+ 1677  2026-07-21 16:03:22 ls -lw DRUG_class_family
+ 1678  2026-07-21 16:04:06 ls -l DRUG_class_family
+ 1679  2026-07-21 16:04:14 ls
+ 1680  2026-07-21 16:04:28 ls -l DRUG_class_family_mapping
+ 1681  2026-07-21 17:30:57 cd ..
+ 1682  2026-07-21 17:31:06 vim README.md
+ 1683  2026-07-21 17:55:58 git add README.md
+ 1684  2026-07-21 17:56:53 git commit -m "Added Readme.md"
+ 1685  2026-07-21 17:57:26 git log --oneline
+ 1686  2026-07-21 17:58:04 git add ARG_Family_classification.ipynb
+ 1687  2026-07-21 17:58:56 git commit -m "Creation of Binary matrix of ARG in DRUG_class_family_mapping"
+ 1688  2026-07-21 17:59:03 git log --oneline
+ 1689  2026-07-21 18:01:30 git branch
+ 1690  2026-07-21 18:01:53 git remote -v
+ 1691  2026-07-21 18:02:10 git remote add origin git@github.com:elexipaul/ARG_ESKAPE.git
+ 1692  2026-07-21 18:03:11 git remote add origin https://github.com/elexipaul/ARG_ESKAPE.git
+ 1693  2026-07-21 18:03:23 git push -u origin main
+ 1694  2026-07-21 18:04:27 git remote set-url origin https://github.com/elexipaul/ARG_ESKAPE.git
+ 1695  2026-07-21 18:04:47 git push -u origin main
+ 1696  2026-07-21 18:22:36 ssh-keygen -t ed25519 -C "pranjalpaul947@gmail.com"
+ 1697  2026-07-21 18:24:07 ls
+ 1698  2026-07-21 18:24:11 ls -la ~/.ssh/
+ 1699  2026-07-21 18:24:11 ls -la
+ 1700  2026-07-21 18:25:08 ssh-keygen -t ed25519 -C "pranjalpaul947@gmail.com"
+ 1701  2026-07-21 18:25:42 cat ~/.ssh/id_ed25519.pub
+ 1702  2026-07-21 18:26:09 ssh -T git@github.com
+ 1703  2026-07-21 18:26:59 ls -la ~/.ssh/id_ed25519 ~/.ssh/id_ed25519.pub
+ 1704  2026-07-21 18:27:34 ssh -vT git@github.com
+ 1705  2026-07-21 18:29:45 git remote add origin git@github.com:elexipaul/ARG_ESKAPE.git
+ 1706  2026-07-21 18:29:55 git push -u origin main
+ 1707  2026-07-21 18:31:46 git remote set-url origin git@github.com:elexipaul/ARG_ESKAPE.git
+ 1708  2026-07-21 18:31:54 git remote -v
+ 1709  2026-07-21 18:32:04 git push -u origin main
+ 1710  2026-07-21 18:35:52 git ls-files | tree --fromfile
+ 1711  2026-07-21 18:36:00 git ls-files
+ 1712  2026-07-21 18:37:10 git rm --cached Untitled.ipynb Untitled6.ipynb
+ 1713  2026-07-21 18:37:18 echo "Untitled*.ipynb" >> .gitignore
+ 1714  2026-07-21 18:37:29 git add .gitignore
+ 1715  2026-07-21 18:37:37 git commit -m "Stop tracking scratch notebooks"
+ 1716  2026-07-21 18:37:51 git push
+ 1717  2026-07-21 18:38:15 git ls-files
+ 1718  2026-07-21 18:39:43 vim README.md
+ 1719  2026-07-21 18:55:00 history
+ 1720  2026-07-21 18:55:38 history | grep -i "2026-07-21" > history_2026-07-21.txt
