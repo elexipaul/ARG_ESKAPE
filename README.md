@@ -14,9 +14,24 @@ This pipeline processes Antimicrobial Resistance (AMR) gene data for ESKAPE path
 * ESKAPE_AMR_Presence_Absence_Matrix.csv : This file has been created by taking the AMR gene  family column from each of the six .csv files and creating a 0/1 matrix , 1st row are the AMR gene families , 1st column is the ESKAPE pathogens. 
 ## Pipeline Steps
 1.  **ARG_Family_classification.ipynb** : This notebook does the extraction and creation of the ARG gene families, Metadata and Binary matrix preparation.
-
+2.  **ARG_Chromosome_Plasmid_Mapping.ipynb** : This notebook does the merging of AMR genes which are on chromosome and plasmid, there was bug in this notebook due to which it didnot classify the plasmids as mobilizable and non mobilizable conjugative and non conjugative plasmids due to which another notebook **Mobsuite_Chromosome_Plasmid_Mobility.ipynb** was used whose results were used by **ARG_Chromosome_Plasmid_Mapping.ipynb** notebook to merge and classify
 ## Usage
 Run the Jupyter Notebook cells in sequential order.
-
+# Added file Mobsuite_Chromosome_Plasmid_Mobility.ipynb
+** This Notebook classifies the plasmid from the 6 ESKAPE pathogens into mobilizable and non mobilizable , conjugative and non conjugative plasmids
+ 
 ## Git version control : 
+git add 
+git commit -m ""
+git push
+## Check the commitment history
+git log --oneline
+git diff <older-hash> <newer-hash> -- <filename>
+
+## List the files 
+git ls-files 
+## Branch
+git switch -c feature_1/
+## Switch to main
+git switch main
 
