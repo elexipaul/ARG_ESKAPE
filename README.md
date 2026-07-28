@@ -34,4 +34,18 @@ git ls-files
 git switch -c feature_1/
 ## Switch to main
 git switch main
+## Add everything and push at once
+git status              # see everything changed, across all files
+git add .                # stage everything at once (respects .gitignore)
+git commit -m "describe the overall change"
+git push
+
+# Date: 28-07-2026
+
+## Classification of ARG across AMR Gene families for ESKAPE Pathogens
+
+### ESKAPE_AMR_Gene_Family_Percent_of_Genes_Matrix_2.csv : Contains the matrix of AMR counts/ Total AMR gene count for each gene family
+## ESKAPE_AMR_Gene_Family_Percent_of_Genes_Matrix_3.csv: was used to create the heatmap
+
+## ESKAPE_AMR_Gene_Family_Percentage_Matrix.csv : There was a mistake in this file as the no of gene counts was divided by Total no of gene family.
 
