@@ -1,0 +1,91 @@
+Control non IBD :
+SRR6468503
+SRR6468522
+SRR6468523
+SRR6468528
+Cron's Disease : 
+SRR6468502
+SRR6468505
+SRR6468507
+SRR6468514
+UC : 
+SRR6468499
+SRR6468500
+SRR6468501
+SRR6468504
+
+
+The host-depleted, non-human reads are:
+
+  SRR6468507_kneaddata_paired_1.fastq.gz
+  SRR6468507_kneaddata_paired_2.fastq.gz
+
+  Generally, for every sample:
+
+  <SRR>_kneaddata_paired_1.fastq.gz
+  <SRR>_kneaddata_paired_2.fastq.gz
+
+  These are the files to use for Kraken2 and downstream metagenomic analysis.
+
+  Files named:
+
+  <SRR>_kneaddata_unmatched_1.fastq.gz
+  <SRR>_kneaddata_unmatched_2.fastq.gz
+
+  are also non-host reads, but contain orphaned reads whose mate was removed. In your displayed run, both contained zero reads.
+
+  To list all final paired non-host files:
+
+  find host_decontamination/kneaddata -type f \
+    \( -name "*_kneaddata_paired_1.fastq*" -o \
+       -name "*_kneaddata_paired_2.fastq*" \) | sort
+       
+  SRC="/home/bioinfo/Desktop/Data_5TB/Metagenomics/omics_logic/host_decontamination/kneaddata"     
+  DEST="/home/bioinfo/Desktop/Data_5TB/Metagenomics/omics_logic/UC"  
+  for SRR in SRR6468499 SRR6468500 SRR6468501 SRR6468504; do
+      find "$SRC" -type f \
+          ! -path '*/.*.work/*' \
+          -name "${SRR}_kneaddata_paired_[12].fastq*" \
+          -exec cp -v -t "$DEST" {} +
+  done
+
+
+### Monitor the log
+bioinfo@bioinformatics:~$ tail -f ~/Desktop/Data_5TB/Metagenomics/omics_logic/kraken2_results/UC/logs/SRR6468499.kraken2.log
+watch -n 5 'ps -p 15383 -o pid,stat,etime,%cpu,%mem,rss,vsz,cmd; free -h'
+
+
+
+
+## kraken memory mapping
+
+With memory mapping, Kraken2 did not load the complete 95 GB hash database into RAM before classification. It mapped the file into virtual memory and fetched database pages only when needed.
+
+Kraken classification performs essentially random k-mer lookups. Because the database was on a large disk—likely an HDD—this caused:
+
+repeated random disk reads;
+many page faults;
+process state D, meaning disk-I/O wait;
+approximately 45% I/O wait;
+mostly idle CPUs despite requesting 64 threads;
+only around 35 GB of the database resident after nearly five hours.
+
+The message:
+
+Loading database information... done.
+
+only meant that the database structure was mapped successfully. It did not mean that all 95 GB had physically entered RAM.
+
+After removing --memory-mapping, Kraken2 instead:
+
+Read the database sequentially from disk.
+Loaded it into RAM.
+Performed random lookups directly in RAM.
+Used the CPU threads effectively.
+
+Sequential disk reading is dramatically faster than millions of random HDD accesses.
+
+Your script starts a separate Kraken2 process for every sample, so each sample technically reloads the database. However, after the first run, Linux usually retains much of the database in filesystem cache. Consequently, database loading for samples 2–4 may be substantially faster.
+
+For your system—125 GiB RAM and a 95 GB database—running without --memory-mapping is the correct choice. Memory mapping would make more sense if the database were on a fast NVMe SSD or could not fit into RAM.
+

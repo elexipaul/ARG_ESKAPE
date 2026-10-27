@@ -1,0 +1,79 @@
+**Protein-level classification and annotation integration: manuscript methods draft**
+
+**Dataset and sequence representation.** Protein-homolog-model sequences and their Antibiotic Resistance Ontology (ARO) annotations were obtained from the local Comprehensive Antibiotic Resistance Database (CARD) dataset. Feature tables were reconciled by sequence identifier and drug-class assignment, and repeated assignments were collapsed to one record per ARO after verifying numerical consistency. The analysis included 6,059 proteins. Family and drug-class memberships were encoded as separate multilabel binary outcomes, preserving multiple annotations per protein. Each target required at least ten positive and ten negative observations and sufficient group support for validation. The initial classifier analysis retained 84 family and 27 drug-class targets; target eligibility was reassessed for sequence-grouped annotation comparisons.
+
+Each protein was represented by 996 numerical descriptors, comprising 956 Pfeature variables and 40 variables from a custom ProFET-style Biopython implementation. Pfeature descriptors summarized amino-acid and dipeptide composition, physicochemical groups, atomic and bond composition, residue distribution and entropy, conjoint triads, pseudo-composition, and sequence-order information. The custom implementation calculated length, molecular weight, isoelectric point, aromaticity, instability index, grand average of hydropathicity, net charge at pH 5, 7, and 9, and aliphatic index for the complete sequence and its N-terminal, middle, and C-terminal thirds. Features with `PRI_` and `RRI_` prefixes were excluded according to the retained extraction schema. Infinite values were converted to missing values. The initial physicochemical classifiers used LightGBM's native missing-value handling. Annotation ablations removed constant or unavailable predictors and fitted median imputation within each training partition.
+
+<!-- [claim:C001] [evidence:E01,E02,E03] -->
+
+**Model architecture and regularization.** Independent binary LightGBM classifiers were fitted for each family and drug class using a binary-relevance architecture. A protein could consequently receive multiple family or drug-class predictions. Each classifier was a histogram-based gradient-boosted ensemble of regression trees optimizing binary logarithmic loss. Successive trees used the gradients and Hessians of the current ensemble loss, with leaf-wise growth selecting the available split with the greatest gain. For target \(c\), the classifier produced a raw additive margin \(F_c(\mathbf{x})\), transformed to a membership score by
+
+\[
+p_c(\mathbf{x})=\frac{1}{1+\exp[-F_c(\mathbf{x})]}.
+\]
+
+The model specification allowed up to 300 boosting rounds with a learning rate of 0.05. Individual trees were limited to 15 leaves, with a minimum leaf-support setting of ten observations and L2 regularization of leaf weights set to 1.0. Depth had no additional explicit limit (`max_depth=-1`); the leaf cap constrained tree size. Class imbalance was addressed using `is_unbalance=True`, which adjusts binary-class weighting. Model settings were fixed across targets and predictor configurations. Hyperparameter search, early-stopping callbacks, row subsampling, and feature subsampling were not used. All predictors were numerical. The core configuration and verified retained defaults are given below. [LightGBM algorithm](https://papers.neurips.cc/paper_files/paper/2017/hash/6449f44a102fde848669bdd9eb6b76fa-Abstract.html); [parameter definitions](https://lightgbm.readthedocs.io/en/latest/Parameters.html).
+
+| Component | Parameter | Setting |
+|---|---|---|
+| Ensemble and loss | `boosting_type`; `objective` | `gbdt`; `binary` |
+| Boosting capacity | `n_estimators`; `learning_rate` | 300 configured rounds; 0.05 |
+| Tree size | `num_leaves`; `max_depth` | 15; −1 |
+| Leaf support | `min_child_samples`; `min_child_weight` | 10; 0.001 minimum Hessian sum |
+| Leaf-weight regularization | `reg_lambda`; `reg_alpha` | 1.0; 0.0 |
+| Split acceptance | `min_split_gain` | 0.0 |
+| Feature sampling | `colsample_bytree` | 1.0 |
+| Row sampling | `subsample`; `subsample_freq` | 1.0; 0 |
+| Class weighting | `is_unbalance` | `True` |
+| CPU parallelism | `n_jobs` | 2 threads per fit |
+| Reproducibility | `random_state`; `deterministic`; `force_col_wise` | 0; `True`; `True` |
+
+Boosting rounds were sequential; the two CPU threads supported computations within a fit, including histogram and split operations. Target classifiers and folds were iterated sequentially in the notebooks. The number of boosting rounds was a capacity setting rather than a count of independent bootstrap-trained trees. Model scores were interpreted as uncalibrated CARD membership scores.
+
+<!-- [claim:C002] [evidence:E01,E02,E03,E04,E09] -->
+
+**Cross-validation and performance assessment.** The initial physicochemical/SHAP analysis used shared five-fold stratified group cross-validation. Groups were connected components of a radius-neighbour graph constructed from standardized, median-imputed descriptors with radius 1.0; exact sequence matches were also linked. This generated 6,045 groups. Descriptor grouping was an approximate similarity criterion, and these estimates were distinguished from subsequent validation using sequence-relatedness groups. Missing-value imputation and standardization for graph construction were not transformations applied to the initial model inputs.
+
+Classification thresholds were selected within each outer training partition using up to three stratified grouped inner folds, maximizing F1 over 0.05–0.95 in steps of 0.01. Ties favoured the largest threshold; insufficient inner support triggered a recorded fallback to 0.50. Outer-held-out scores and decisions were pooled to calculate average precision (AP), AUROC, F1, precision, recall, accuracy, and confusion matrices. Multilabel summaries included micro- and macro-averaged AP and F1, exact-match accuracy, and Hamming loss. ROC and precision–recall curves were generated from out-of-fold scores.
+
+For annotation associations and ablations, all-against-all MMseqs2 searches (version 18.8cc5c; sensitivity 7.5) identified relationships meeting at least 40% sequence identity and 80% coverage of both query and target. Connected components formed 369 sequence groups, allowing transitive relationships. Groups were retained intact in training and test partitions. The maximum outer-fold count was five; executed comparisons used two folds in the complete and exact-UniProt-mapped cohorts and five folds in the reviewed subset. The complete-cohort ablation retained ten family and 24 drug-class targets. Up to three inner grouped folds selected thresholds on a 0.05–0.95 grid with step 0.05, with ties favouring values nearest 0.50. Targets lacking valid inner splits were excluded. These inner folds were fixed across predictor configurations for each target.
+
+<!-- [claim:C003] [evidence:E01,E02,E03,E05,E06] -->
+
+**SHAP interpretation and family–drug-class comparison.** SHAP TreeExplainer was applied to initial outer-held-out proteins using tree-path-dependent perturbation and raw-margin output. Attribution additivity was checked against the model's raw score. Global importance for target \(c\) and descriptor \(j\) was calculated as the mean absolute attribution across all held-out proteins,
+
+\[
+I_{cj}=N^{-1}\sum_i|\phi_{icj}|,
+\]
+
+with fold summaries weighted by test-set size. Mean absolute SHAP quantified importance; its magnitude did not establish the direction of a descriptor's biological association. A study-specific comparison rule retained target profiles satisfying \(\max_j I_{cj}\leq2.0\), and up to 15 nonzero descriptors were selected per target. The cutoff was an exploratory profile filter. Jaccard similarity measured overlap between the selected family and drug-class feature sets, while Spearman correlation compared their aligned complete 996-feature profiles. Family–drug-class pairs were tagged as CARD-linked when both labels co-occurred in a local ARO record and ranked by Jaccard similarity followed by Spearman correlation. Pairs were categorized according to their linkage in CARD and exported as separate ranked CARD-linked and CARD-unlinked datasets. Targets with AP or F1 below 0.50 received a quality flag.
+
+<!-- [claim:C004] [evidence:E01,E03] -->
+
+**Protein-domain and functional annotation.** All cohort proteins were scanned using InterProScan 5.78-109.0, with Java 11, batches of 250 proteins, and 12 CPU threads. Selected applications were Pfam 38.2, PROSITE Patterns and Profiles 2026_01, Gene3D 4.3.0, and SUPERFAMILY 1.75. XML and TSV outputs retained signature identifiers, integrated InterPro entries, coordinates, scores, E-values, and available HMM coordinates; XML records verified completed scan coverage. Pfam and InterPro terms were encoded as protein-by-annotation presence matrices. Pfam copy counts were deduplicated by protein, accession, and coordinates. Quantitative variables comprised match score, score divided by model length, matched-region protein coverage, and HMM coverage; the maximum available value for each field was retained for repeated protein–domain hits. Non-hit quantitative values remained missing. Other scanned libraries contributed integrated InterPro terms and retained source annotations.
+
+UniProtKB entries were retrieved using CARD-associated accession mappings and accepted only after exact protein-sequence agreement. Representative entries were selected by reviewed status, annotation score, and accession order. GO/EC terms, feature types, locations, and cofactors supplied interpretation context. Classifier inputs were restricted to seven generic numerical measurements: annotated active-site, binding-site, transmembrane-region, signal-region, and disulfide-bond counts, and transmembrane and signal-region coverage fractions. Protein identifiers, names, GO/EC terms, and resistance descriptions did not enter the UniProt predictor block. Unmapped proteins retained missing values; mapped proteins without a recorded annotation were interpreted as unannotated. Exact-mapping and reviewed subsets contained 4,060 and 272 proteins, respectively.
+
+<!-- [claim:C005] [evidence:E02,E07,E08] -->
+
+**Descriptor–annotation association analysis.** Raw descriptors were compared between annotated and unannotated proteins using two-sided Mann–Whitney U tests and Cliff's delta, requiring at least ten observations per state. Length-adjusted rank associations were obtained by correlating residuals after regressing ranked descriptors and ranked annotations on standardized log protein length. Cluster-robust residual regression supplied accompanying P-values. Length descriptors were excluded from adjusted analyses. Benjamini–Hochberg correction was applied separately to unadjusted and cluster-adjusted test families within each panel. Candidates required both q-values below 0.05, absolute Cliff's delta at least 0.33, and at least five contributing sequence groups per state.
+
+Screened global candidates underwent 2,000 whole-cluster bootstrap replicates, with ranks and length adjustment recalculated after resampling. Percentile 95% intervals were retained when at least 90% of replicates were valid; intervals excluding zero identified stable exploratory associations. Conditional Spearman analyses related descriptors to Pfam score, coverage, or copy count among domain-positive proteins only, requiring at least 20 valid observations. Supported within-family, drug-class, resistance-mechanism, and reviewed-UniProt panels were screened separately and treated as post hoc analyses.
+
+<!-- [claim:C006] [evidence:E02] -->
+
+**Matched predictor comparisons and biological interpretation.** Five configurations were evaluated on matched targets and sequence-grouped folds: R1, physicochemical descriptors; R2, Pfam presence/count/quantitative variables and InterPro presence; R3, generic UniProt measurements; R4, R2 plus R3; and R5, all three blocks. Comparisons were conducted separately within complete, exact-mapped, and reviewed cohorts. Performance changes relative to R1 were calculated per target using AP, AUROC, F1, and normalized Matthews correlation coefficient, \(\mathrm{nMCC}=(\mathrm{MCC}+1)/2\). One joint row permutation of the multilabel outcomes per cohort provided a shared shuffled-label diagnostic across configurations; a single shuffle did not provide a permutation P-value.
+
+SHAP-selected descriptors were joined to stable global descriptor–annotation associations and target-specific annotation prevalence. Biological interpretation required annotation occurrence in the target proteins and considered background prevalence, effect direction, sequence-group support, and bootstrap intervals. UniProt prevalence denominators included exact-mapped proteins only. Corresponding Pfam and InterPro entries were recognized as overlapping annotation evidence. The integration supplied post hoc context in the same protein cohort; whole-protein associations did not localize effects to catalytic sites or establish additional resistance phenotypes.
+
+<!-- [claim:C007] [evidence:E01,E02,E06] -->
+
+**Model deployment and reproducibility.** After evaluation, the initial physicochemical classifiers were refitted on all proteins and saved in one archive containing native models, feature order, labels, thresholds, and applicability metadata. Deployment thresholds were derived from pooled out-of-fold predictions; validation F1 used inner-selected thresholds. Reloaded predictions were checked against their pre-save values. Query proteins underwent the same descriptor extraction, feature compatibility checks, and training-identity screening. A training-fitted reference using median imputation, robust scaling, 50-component PCA, nearest-neighbour distance, and reconstruction residuals supplied applicability flags at the 99th-percentile reference cutoffs. Annotation ablations were evaluation experiments; the deployed archive used physicochemical descriptors.
+
+Analyses used Pfeature 1.4, Biopython 1.86, NumPy 2.4.4, pandas 2.3.3, SciPy 1.17.1, scikit-learn 1.8.0, LightGBM 4.7.0, and SHAP 0.52.0. Configurations, software and annotation provenance, input hashes, fold assignments, target exclusions, and cached outputs were retained.
+
+<!-- [claim:C008] [evidence:E01,E02,E03,E04,E06,E08] -->
+
+**Editorial notes for final manuscript preparation.** The exact CARD release and acquisition date should be supplied from the acquisition record. The original extraction audit should support the `PRI_`/`RRI_` exclusion. Saved-model inspection confirmed 300 trees in 110 initial final classifiers and one two-leaf tree in the ROB β-lactamase final classifier; therefore ensemble size is described as “up to 300 rounds.” The available artifacts do not by themselves establish why that target retained fewer trees. The descriptor-based SHAP evaluation and MMseqs2-based annotation validation represent distinct executed designs and should remain distinguishable in the manuscript.
+
+This draft consolidates `ARG_family_drug_class_SHAP_comparison.ipynb`, `protein_annotation_physicochemical_integration.ipynb`, and `ML_SHAP_Protein_Annotation_Methodology.md`. References for the explanatory and domain-representation precedents remain [Cen et al. (2025)](https://doi.org/10.1016/j.bsheal.2025.11.001), [Ghosh et al. (supplied 2025 preprint)](https://doi.org/10.1101/2025.07.03.663053), [Pfeature](https://pubmed.ncbi.nlm.nih.gov/36251780/), and [InterProScan 5](https://pmc.ncbi.nlm.nih.gov/articles/PMC3998142/). They do not change the executed model architecture. Drafting assistance used the scientific-writing skill, documented by [Kassis et al. (2026)](https://doi.org/10.48550/arXiv.2609.00065). Author verification is pending; no models or annotation analyses were rerun for this revision.

@@ -1,0 +1,61 @@
+ File                              Contents/purpose
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   README.md                         Exact schema, column definitions, database version, and usage instructions.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   sequences.fasta.bz2               Compressed nucleotide FASTA containing the reference plasmid sequences.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   plsdb_sketch.msh                  Binary Mash sketch for rapidly comparing query contigs/sequences against PLSDB.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   plsdb_mashdb_sim.tsv              Precomputed Mash similarities or nearest-neighbour relationships among plasmids.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   nuccore.csv                       Main plasmid record table: NCBI nucleotide accession, description, length, GC, topology and linked record identifiers.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   nucc_identical.csv                Links dereplicated records to other NCBI accessions having identical nucleotide sequences.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   assembly.csv                      Associated NCBI Assembly metadata.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   biosample.csv                     Associated NCBI BioSample records, isolation source, host, location and sample metadata.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   biosample_attributes_plsdb.csv    Definitions/mapping of standardized BioSample attributes incorporated into PLSDB.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   taxonomy.csv                      NCBI host taxonomy and lineage information.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   ecopaths.csv                      Curated/inferred ecosystem classifications and their hierarchical paths.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   disease_terms.csv                 Disease or symptom ontology terms associated with host samples.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   typing.csv                        Summary plasmid typing: replicon, relaxase, MPF, oriT, predicted mobility and possibly pMLST.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   typing_markers.csv                Detailed mobility-marker hits used to produce the typing summaries.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   plasmidfinder.csv                 Detailed PlasmidFinder replicon hits, including identity, coverage and coordinates.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   amr.tsv                           AMR-gene annotations from resources such as AMRFinderPlus and CARD/RGI.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   proteins.csv                      Protein-coding feature metadata: genes, products, locus tags and protein identifiers.
+  ────────────────────────────────  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   proteins.fasta                    Amino-acid sequences corresponding to proteins.csv.
+
+
+
+In typing.csv, mash_neighbor_identification is the reported bacterial identification of the closest matching reference plasmid found by MOB-typer’s Mash search. It describes the neighbor, not necessarily the organism from which your plasmid was collected.
+
+Read the three fields together:
+
+mash_nearest_neighbor: the matching reference plasmid
+mash_neighbor_distance: how different its sequence is from your plasmid; smaller means more similar
+mash_neighbor_identification: the organism associated with that reference plasmid
+
+For your plasmid’s own recorded organism, use TAXONOMY_species after joining taxonomy.csv. If the two organisms differ, that may be interesting to investigate, but this field alone does not demonstrate plasmid transfer between them. The PLSDB README (plasmid_study/README.md) defines it as the host taxonomy of the database match.
+
+## plasfinder results
+organism_L1 and organism_L2 in plasmid_study/plasmidfinder.csv.
+
+They label the organism group of the PlasmidFinder reference database used for that replicon hit. L1 is the broad group; L2 is its more specific database category. In this file, the L1 groups are “Enterobacteriales” and “Gram positive.” These are database labels, not formal taxonomic ranks.
+
+They do not identify the organism that carried your PLSDB plasmid. For your ESKAPE selection, use TAXONOMY_genus and TAXONOMY_species from taxonomy.csv; use organism_L1/L2 only to interpret the PlasmidFinder hit.
+
+##accession column is the GenBank accession of the reference plasmid in the PlasmidFinder database associated with that hit, as described in the README (plasmid_study/README.md).
+
+## 92967 no of total plasmids
+

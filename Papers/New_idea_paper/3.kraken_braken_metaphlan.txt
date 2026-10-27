@@ -1,0 +1,1158 @@
+#!/usr/bin/env bash
+
+  set -uo pipefail
+
+  DB="/mnt/data/Metagenomics/kraken2db"
+  INPUT_DIR="/mnt/data/Metagenomics/omics_logic/host_decontamination/kneaddata"
+  OUT_DIR="/mnt/data/Metagenomics/omics_logic/kraken2_results"
+  THREADS=64
+
+  REPORT_DIR="$OUT_DIR/reports"
+  LOG_DIR="$OUT_DIR/logs"
+  STATUS_DIR="$OUT_DIR/status"
+
+  mkdir -p "$REPORT_DIR" "$LOG_DIR" "$STATUS_DIR"
+
+  for tool in kraken2; do
+      command -v "$tool" >/dev/null 2>&1 || {
+          echo "ERROR: $tool is not installed."
+          exit 1
+      }
+  done
+
+  for file in hash.k2d opts.k2d taxo.k2d; do
+      [[ -s "$DB/$file" ]] || {
+          echo "ERROR: missing database file: $DB/$file"
+          exit 1
+      }
+  done
+
+  shopt -s nullglob
+  R1_FILES=("$INPUT_DIR"/*/*_kneaddata_paired_1.fastq)
+  shopt -u nullglob
+
+  TOTAL=${#R1_FILES[@]}
+
+  if ((TOTAL == 0)); then
+      echo "ERROR: no KneadData paired FASTQ files found."
+      exit 1
+  fi
+
+  COMPLETED=0
+  SKIPPED=0
+  FAILED=0
+
+  echo "Found $TOTAL samples."
+  echo "Kraken2 database: $DB"
+  echo "Threads: $THREADS"
+
+  for i in "${!R1_FILES[@]}"; do
+      R1="${R1_FILES[$i]}"
+      SAMPLE="$(basename "$R1" _kneaddata_paired_1.fastq)"
+      R2="$(dirname "$R1")/${SAMPLE}_kneaddata_paired_2.fastq"
+
+      REPORT="$REPORT_DIR/${SAMPLE}.kraken2.report"
+      REPORT_TMP="$REPORT.part"
+      LOG="$LOG_DIR/${SAMPLE}.kraken2.log"
+      DONE="$STATUS_DIR/${SAMPLE}.done"
+
+      echo
+      echo "[$((i + 1))/$TOTAL] $SAMPLE"
+
+      if [[ -f "$DONE" && -s "$REPORT" ]]; then
+          echo "[SKIP] Already completed."
+          SKIPPED=$((SKIPPED + 1))
+          continue
+      fi
+
+      if [[ ! -s "$R2" ]]; then
+          echo "[FAIL] Missing mate: $R2"
+          FAILED=$((FAILED + 1))
+          continue
+      fi
+
+      rm -f -- "$REPORT_TMP"
+
+      {
+          echo "Started: $(date --iso-8601=seconds)"
+          echo "R1: $R1"
+          echo "R2: $R2"
+
+          kraken2 \
+              --db "$DB" \
+              --memory-mapping \
+              --threads "$THREADS" \
+              --paired \
+              --use-names \
+              --report "$REPORT_TMP" \
+              --output /dev/null \
+              "$R1" "$R2"
+
+          echo "Finished: $(date --iso-8601=seconds)"
+      } >"$LOG" 2>&1
+
+      if [[ $? -eq 0 && -s "$REPORT_TMP" ]]; then
+          mv -- "$REPORT_TMP" "$REPORT"
+          : > "$DONE"
+          echo "[OK] Report: $REPORT"
+          COMPLETED=$((COMPLETED + 1))
+      else
+          echo "[FAIL] Check log: $LOG"
+          FAILED=$((FAILED + 1))
+      fi
+  done
+
+  echo
+  echo "Completed: $COMPLETED"
+  echo "Skipped:   $SKIPPED"
+  echo "Failed:    $FAILED"
+  echo "Total:     $TOTAL"
+
+  ((FAILED == 0))
+
+  Run it:
+
+  chmod +x run_kraken2_batch.sh
+  ./run_kraken2_batch.sh
+
+
+## Bracken Script : conda install -y -c conda-forge -c bioconda bracken
+#!/usr/bin/env bash
+
+set -uo pipefail
+
+# =============================================================================
+# Configuration
+# =============================================================================
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+DB_DIR="$SCRIPT_DIR/../kraken2db"
+KRAKEN_ROOT="$SCRIPT_DIR/kraken2_results"
+BRACKEN_ROOT="$SCRIPT_DIR/bracken_results"
+
+GROUPS=("CD" "UC" "non_IBD")
+
+# Must correspond to a Bracken file such as:
+# database150mers.kmer_distrib
+READ_LENGTH=150
+
+# S = species, G = genus, F = family
+TAXONOMIC_LEVEL="S"
+
+# Minimum number of Kraken-assigned reads required
+THRESHOLD=10
+
+RUN_ID="$(date '+%Y%m%d_%H%M%S')"
+
+mkdir -p "$BRACKEN_ROOT"
+
+MASTER_LOG="$BRACKEN_ROOT/bracken_run_${RUN_ID}.log"
+
+# Log terminal output and save it to the master log
+exec > >(tee -a "$MASTER_LOG") 2>&1
+
+echo "============================================================"
+echo "Bracken abundance-estimation pipeline"
+echo "Started:           $(date --iso-8601=seconds)"
+echo "Kraken root:       $KRAKEN_ROOT"
+echo "Bracken output:    $BRACKEN_ROOT"
+echo "Database:          $DB_DIR"
+echo "Read length:       $READ_LENGTH"
+echo "Taxonomic level:   $TAXONOMIC_LEVEL"
+echo "Read threshold:    $THRESHOLD"
+echo "Groups:            ${GROUPS[*]}"
+echo "Master log:        $MASTER_LOG"
+echo "============================================================"
+
+# =============================================================================
+# Preflight checks
+# =============================================================================
+
+command -v bracken >/dev/null 2>&1 || {
+    echo "ERROR: bracken is not installed or is not available in PATH."
+    exit 1
+}
+
+for FILE in hash.k2d opts.k2d taxo.k2d; do
+    [[ -s "$DB_DIR/$FILE" ]] || {
+        echo "ERROR: missing Kraken2 database file: $DB_DIR/$FILE"
+        exit 1
+    }
+done
+
+DISTRIBUTION_FILE="$DB_DIR/database${READ_LENGTH}mers.kmer_distrib"
+
+[[ -s "$DISTRIBUTION_FILE" ]] || {
+    echo "ERROR: missing Bracken distribution file:"
+    echo "       $DISTRIBUTION_FILE"
+    echo
+    echo "Available distributions:"
+    find "$DB_DIR" -maxdepth 1 \
+        -name 'database*mers.kmer_distrib' \
+        -printf '  %f\n' | sort
+    exit 1
+}
+
+# =============================================================================
+# Count input reports
+# =============================================================================
+
+TOTAL=0
+
+for GROUP in "${GROUPS[@]}"; do
+    REPORT_DIR="$KRAKEN_ROOT/$GROUP/reports"
+
+    [[ -d "$REPORT_DIR" ]] || {
+        echo "WARNING: report directory not found: $REPORT_DIR"
+        continue
+    }
+
+    shopt -s nullglob
+    REPORTS=("$REPORT_DIR"/*.kraken2.report)
+    shopt -u nullglob
+
+    TOTAL=$((TOTAL + ${#REPORTS[@]}))
+done
+
+if (( TOTAL == 0 )); then
+    echo "ERROR: no Kraken2 report files were found."
+    exit 1
+fi
+
+echo
+echo "Found $TOTAL Kraken2 reports."
+echo
+
+# =============================================================================
+# Run Bracken
+# =============================================================================
+
+PROCESSED=0
+COMPLETED=0
+SKIPPED=0
+FAILED=0
+FAILED_SAMPLES=()
+
+for GROUP in "${GROUPS[@]}"; do
+    KRAKEN_REPORT_DIR="$KRAKEN_ROOT/$GROUP/reports"
+
+    [[ -d "$KRAKEN_REPORT_DIR" ]] || continue
+
+    OUTPUT_DIR="$BRACKEN_ROOT/$GROUP/species_abundance"
+    REPORT_DIR="$BRACKEN_ROOT/$GROUP/reports"
+    LOG_DIR="$BRACKEN_ROOT/$GROUP/logs"
+    STATUS_DIR="$BRACKEN_ROOT/$GROUP/status"
+
+    mkdir -p \
+        "$OUTPUT_DIR" \
+        "$REPORT_DIR" \
+        "$LOG_DIR" \
+        "$STATUS_DIR"
+
+    shopt -s nullglob
+    KRAKEN_REPORTS=("$KRAKEN_REPORT_DIR"/*.kraken2.report)
+    shopt -u nullglob
+
+    if (( ${#KRAKEN_REPORTS[@]} == 0 )); then
+        echo "WARNING: no Kraken2 reports found for group: $GROUP"
+        continue
+    fi
+
+    echo "------------------------------------------------------------"
+    echo "Processing group: $GROUP"
+    echo "Reports found:    ${#KRAKEN_REPORTS[@]}"
+    echo "------------------------------------------------------------"
+
+    for KRAKEN_REPORT in "${KRAKEN_REPORTS[@]}"; do
+        PROCESSED=$((PROCESSED + 1))
+
+        SAMPLE="$(basename "$KRAKEN_REPORT" .kraken2.report)"
+
+        BRACKEN_OUTPUT="$OUTPUT_DIR/${SAMPLE}.bracken.${TAXONOMIC_LEVEL}.tsv"
+        BRACKEN_REPORT="$REPORT_DIR/${SAMPLE}.bracken.${TAXONOMIC_LEVEL}.report"
+
+        OUTPUT_TMP="${BRACKEN_OUTPUT}.part"
+        REPORT_TMP="${BRACKEN_REPORT}.part"
+
+        LOG="$LOG_DIR/${SAMPLE}.bracken.log"
+        DONE="$STATUS_DIR/${SAMPLE}.done"
+
+        echo
+        echo "[$PROCESSED/$TOTAL] $GROUP/$SAMPLE"
+
+        if [[ -f "$DONE" &&
+              -s "$BRACKEN_OUTPUT" &&
+              -s "$BRACKEN_REPORT" ]]; then
+            echo "[SKIP] Already completed."
+            SKIPPED=$((SKIPPED + 1))
+            continue
+        fi
+
+        if [[ ! -s "$KRAKEN_REPORT" ]]; then
+            echo "[FAIL] Empty Kraken2 report: $KRAKEN_REPORT"
+            FAILED=$((FAILED + 1))
+            FAILED_SAMPLES+=("$GROUP/$SAMPLE")
+            continue
+        fi
+
+        rm -f -- "$OUTPUT_TMP" "$REPORT_TMP"
+
+        {
+            echo "Sample:            $SAMPLE"
+            echo "Group:             $GROUP"
+            echo "Started:           $(date --iso-8601=seconds)"
+            echo "Kraken report:     $KRAKEN_REPORT"
+            echo "Bracken database:  $DB_DIR"
+            echo "Read length:       $READ_LENGTH"
+            echo "Taxonomic level:   $TAXONOMIC_LEVEL"
+            echo "Threshold:         $THRESHOLD"
+            echo
+
+            bracken \
+                -d "$DB_DIR" \
+                -i "$KRAKEN_REPORT" \
+                -o "$OUTPUT_TMP" \
+                -w "$REPORT_TMP" \
+                -r "$READ_LENGTH" \
+                -l "$TAXONOMIC_LEVEL" \
+                -t "$THRESHOLD"
+
+            STATUS=$?
+
+            echo
+            echo "Bracken exit status: $STATUS"
+            echo "Finished: $(date --iso-8601=seconds)"
+
+            exit "$STATUS"
+        } >"$LOG" 2>&1
+
+        STATUS=$?
+
+        if [[ $STATUS -eq 0 &&
+              -s "$OUTPUT_TMP" &&
+              -s "$REPORT_TMP" ]]; then
+
+            mv -- "$OUTPUT_TMP" "$BRACKEN_OUTPUT"
+            mv -- "$REPORT_TMP" "$BRACKEN_REPORT"
+            : > "$DONE"
+
+            echo "[OK] Abundance table: $BRACKEN_OUTPUT"
+            echo "[OK] Bracken report:  $BRACKEN_REPORT"
+
+            COMPLETED=$((COMPLETED + 1))
+        else
+            echo "[FAIL] Bracken failed. Check: $LOG"
+
+            FAILED=$((FAILED + 1))
+            FAILED_SAMPLES+=("$GROUP/$SAMPLE")
+        fi
+    done
+done
+
+# =============================================================================
+# Final summary
+# =============================================================================
+
+echo
+echo "============================================================"
+echo "Bracken pipeline summary"
+echo "Finished:  $(date --iso-8601=seconds)"
+echo "Total:     $TOTAL"
+echo "Completed: $COMPLETED"
+echo "Skipped:   $SKIPPED"
+echo "Failed:    $FAILED"
+echo "Master log: $MASTER_LOG"
+echo "============================================================"
+
+if (( FAILED > 0 )); then
+    echo
+    echo "Failed samples:"
+
+    for SAMPLE in "${FAILED_SAMPLES[@]}"; do
+        echo "  $SAMPLE"
+    done
+
+    exit 1
+fi
+
+echo "Pipeline finished successfully."
+exit 0
+
+Run it with:
+
+chmod +x run_bracken.sh
+./run_bracken.sh
+
+The main species-abundance files will be stored as:
+
+bracken_results/CD/species_abundance/*.bracken.S.tsv
+bracken_results/UC/species_abundance/*.bracken.S.tsv
+bracken_results/non_IBD/species_abundance/*.bracken.S.tsv
+
+Monitor the master log:
+
+tail -f "$(ls -t bracken_results/bracken_run_*.log | head -n 1)"
+
+Monitor a specific sample:
+
+tail -f bracken_results/UC/logs/SRR6468499.bracken.log
+
+For this command:
+
+bracken \
+    -d "$DB_DIR" \
+    -i "$KRAKEN_REPORT" \
+    -o "$BRACKEN_OUTPUT" \
+    -w "$BRACKEN_REPORT" \
+    -r 150 \
+    -l S \
+    -t 10
+
+ Flag      Meaning
+━━━━━━━━  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ -d        Kraken2/Bracken database directory. It must contain hash.k2d, opts.k2d, taxo.k2d, and the matching Bracken distribution file such as
+           database150mers.kmer_distrib.
+────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ -i        Input Kraken2 report generated using kraken2 --report. This is not a FASTQ or the per-read Kraken output.
+────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ -o        Main Bracken abundance table. It contains the original Kraken-assigned reads, reads redistributed by Bracken, estimated reads, and estimated abundance
+           fraction.
+────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ -w        Optional Kraken-style report containing Bracken-adjusted counts. This is useful for downstream programs that expect Kraken report format.
+────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ -r 150    Expected read length: 150 bp. Bracken therefore uses database150mers.kmer_distrib. This is not a thread count.
+────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ -l S      Estimate abundance at species level.
+────────  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ -t 10     Minimum Kraken-assigned read threshold at the selected taxonomic level before Bracken performs redistribution. This is not a thread count.
+
+Available levels include:
+
+D  domain
+P  phylum
+C  class
+O  order
+F  family
+G  genus
+S  species
+
+The most important distinction is:
+
+bracken -t 10         = read threshold
+bracken-build -t 64   = build threads
+
+Bracken itself does not have a normal multithreading flag. It operates on the Kraken report and redistributes reads assigned at higher taxonomic levels to the requested level using the database’s expected k-mer distributions. It does not read the FASTQ files or rerun classification.
+
+For your post-fastp reads, -r 150 is appropriate if their average retained length remains close to 150 bp. If the average is closer to 125, 100, or 75 bp, use the nearest corresponding distribution file available in your database.
+
+confirm the exact post-filtering fields written by fastp, then give you a command that compares the observed mean length with the Bracken distributions already present in your database.
+• Searched the web for fastp official GitHub JSON report summary after_filtering read1_mean_length total_bases total_reads
+The easiest method is to use the fastp JSON reports. They contain post-filtering mean lengths for R1 and R2, plus total reads and bases. fastp documents JSON report generation with --json.
+
+First locate the reports:
+
+find host_decontamination -type f -name '*.json' -printf '%p\n'
+
+For one sample:
+
+jq '.summary.after_filtering |
+    {
+      total_reads,
+      total_bases,
+      read1_mean_length,
+      read2_mean_length,
+      combined_mean_length: (.total_bases / .total_reads)
+    }' sample.fastp.json
+
+Example interpretation:
+
+read1_mean_length:   147
+read2_mean_length:   145
+combined_mean_length: 146
+
+In that case, 150 is the closest Bracken length.
+
+For all fastp reports together, calculate a read-count-weighted mean:
+
+FASTP_DIR="/home/bioinfo/Desktop/Data_5TB/Metagenomics/omics_logic/host_decontamination"
+
+mapfile -d '' JSON_FILES < <(
+    find "$FASTP_DIR" -type f -name '*.json' -print0
+)
+
+if (( ${#JSON_FILES[@]} == 0 )); then
+    echo "No fastp JSON reports found."
+else
+    MEAN_LENGTH=$(
+        jq -s '
+          ([.[].summary.after_filtering.total_bases] | add) /
+          ([.[].summary.after_filtering.total_reads] | add)
+        ' "${JSON_FILES[@]}"
+    )
+
+    printf 'Weighted post-fastp mean length: %.2f bp\n' "$MEAN_LENGTH"
+fi
+
+List the Bracken lengths available:
+
+DB="/home/bioinfo/Desktop/Data_5TB/Metagenomics/kraken2db"
+
+find "$DB" -maxdepth 1 \
+    -name 'database*mers.kmer_distrib' \
+    -printf '%f\n' |
+sed -E 's/database([0-9]+)mers\.kmer_distrib/\1/' |
+sort -n
+
+Your database previously showed:
+
+50
+75
+100
+150
+200
+250
+300
+
+Use the available value with the smallest absolute difference:
+
+Mean 140–160 bp → use -r 150
+Mean 120 bp → use -r 100
+Mean 130 bp → use -r 150
+Mean 90 bp → use -r 100
+
+With the available 100- and 150-bp models, the midpoint is 125 bp:
+
+Mean < 125 bp  → 100
+Mean > 125 bp  → 150
+
+You can automatically find the closest database length:
+
+find "$DB" -maxdepth 1 \
+    -name 'database*mers.kmer_distrib' \
+    -printf '%f\n' |
+sed -E 's/database([0-9]+)mers\.kmer_distrib/\1/' |
+sort -n |
+awk -v mean="$MEAN_LENGTH" '
+{
+    difference = $1 - mean
+    if (difference < 0) difference = -difference
+
+    if (!found || difference < best_difference) {
+        found = 1
+        best_difference = difference
+        best_length = $1
+    }
+}
+END {
+    printf "Mean length: %.2f bp\nClosest Bracken length: %d bp\n",
+           mean, best_length
+}'
+
+Because KneadData only removed host reads and bypassed trimming, the post-fastp lengths remain an appropriate approximation for the final non-host reads. If individual samples have substantially different mean lengths, select -r per sample rather than using one value for all samples. Bracken requires the corresponding database${READ_LENGTH}mers.kmer_distrib file.
+
+
+## Version:2 
+##Bracken_Script
+#!/usr/bin/env bash
+
+set -uo pipefail
+
+# =============================================================================
+# Configuration
+# =============================================================================
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+DB_DIR="$SCRIPT_DIR/../kraken2db"
+KRAKEN_ROOT="$SCRIPT_DIR/kraken2_results"
+BRACKEN_ROOT="$SCRIPT_DIR/bracken_results"
+
+# Biological cohorts/directories
+COHORTS=("CD" "UC" "non_IBD")
+
+# Must correspond to:
+# database150mers.kmer_distrib
+READ_LENGTH=150
+
+# Taxonomic level:
+# D=domain, P=phylum, C=class, O=order, F=family, G=genus, S=species
+TAXONOMIC_LEVEL="S"
+
+# Minimum number of Kraken-assigned reads required at the selected level
+THRESHOLD=10
+
+RUN_ID="$(date '+%Y%m%d_%H%M%S')"
+
+mkdir -p "$BRACKEN_ROOT"
+
+MASTER_LOG="$BRACKEN_ROOT/bracken_run_${RUN_ID}.log"
+
+# Send terminal output to both screen and master log
+exec > >(tee -a "$MASTER_LOG") 2>&1
+
+echo "============================================================"
+echo "Bracken abundance-estimation pipeline"
+echo "Started:           $(date --iso-8601=seconds)"
+echo "Kraken root:       $KRAKEN_ROOT"
+echo "Bracken output:    $BRACKEN_ROOT"
+echo "Database:          $DB_DIR"
+echo "Read length:       $READ_LENGTH"
+echo "Taxonomic level:   $TAXONOMIC_LEVEL"
+echo "Read threshold:    $THRESHOLD"
+echo "Cohorts:           ${COHORTS[*]}"
+echo "Master log:        $MASTER_LOG"
+echo "============================================================"
+
+# =============================================================================
+# Preflight checks
+# =============================================================================
+
+command -v bracken >/dev/null 2>&1 || {
+    echo "ERROR: bracken is not installed or is not available in PATH."
+    exit 1
+}
+
+echo "Bracken executable: $(command -v bracken)"
+bracken -v 2>/dev/null || true
+
+for FILE in hash.k2d opts.k2d taxo.k2d; do
+    if [[ ! -s "$DB_DIR/$FILE" ]]; then
+        echo "ERROR: missing Kraken2 database file: $DB_DIR/$FILE"
+        exit 1
+    fi
+done
+
+DISTRIBUTION_FILE="$DB_DIR/database${READ_LENGTH}mers.kmer_distrib"
+
+if [[ ! -s "$DISTRIBUTION_FILE" ]]; then
+    echo "ERROR: missing Bracken distribution file:"
+    echo "       $DISTRIBUTION_FILE"
+    echo
+    echo "Available distributions:"
+
+    find "$DB_DIR" -maxdepth 1 \
+        -name 'database*mers.kmer_distrib' \
+        -printf '  %f\n' |
+        sort
+
+    exit 1
+fi
+
+echo "Distribution file: $DISTRIBUTION_FILE"
+
+# =============================================================================
+# Count input Kraken2 reports
+# =============================================================================
+
+TOTAL=0
+
+for COHORT in "${COHORTS[@]}"; do
+    KRAKEN_COHORT_REPORT_DIR="$KRAKEN_ROOT/$COHORT/reports"
+
+    if [[ ! -d "$KRAKEN_COHORT_REPORT_DIR" ]]; then
+        echo "WARNING: Kraken report directory not found:"
+        echo "         $KRAKEN_COHORT_REPORT_DIR"
+        continue
+    fi
+
+    shopt -s nullglob
+    REPORTS=("$KRAKEN_COHORT_REPORT_DIR"/*.kraken2.report)
+    shopt -u nullglob
+
+    REPORT_COUNT=${#REPORTS[@]}
+
+    echo "Kraken reports in $COHORT: $REPORT_COUNT"
+
+    TOTAL=$((TOTAL + REPORT_COUNT))
+done
+
+if (( TOTAL == 0 )); then
+    echo "ERROR: no Kraken2 report files were found."
+    exit 1
+fi
+
+echo
+echo "Found $TOTAL Kraken2 reports in total."
+echo
+
+# =============================================================================
+# Run Bracken
+# =============================================================================
+
+PROCESSED=0
+COMPLETED=0
+SKIPPED=0
+FAILED=0
+
+FAILED_SAMPLES=()
+
+for COHORT in "${COHORTS[@]}"; do
+    KRAKEN_COHORT_REPORT_DIR="$KRAKEN_ROOT/$COHORT/reports"
+
+    if [[ ! -d "$KRAKEN_COHORT_REPORT_DIR" ]]; then
+        continue
+    fi
+
+    ABUNDANCE_DIR="$BRACKEN_ROOT/$COHORT/species_abundance"
+    BRACKEN_REPORT_DIR="$BRACKEN_ROOT/$COHORT/reports"
+    LOG_DIR="$BRACKEN_ROOT/$COHORT/logs"
+    STATUS_DIR="$BRACKEN_ROOT/$COHORT/status"
+
+    mkdir -p \
+        "$ABUNDANCE_DIR" \
+        "$BRACKEN_REPORT_DIR" \
+        "$LOG_DIR" \
+        "$STATUS_DIR"
+
+    shopt -s nullglob
+    KRAKEN_REPORTS=(
+        "$KRAKEN_COHORT_REPORT_DIR"/*.kraken2.report
+    )
+    shopt -u nullglob
+
+    if (( ${#KRAKEN_REPORTS[@]} == 0 )); then
+        echo "WARNING: no Kraken2 reports found for cohort: $COHORT"
+        continue
+    fi
+
+    echo "------------------------------------------------------------"
+    echo "Processing cohort: $COHORT"
+    echo "Reports found:     ${#KRAKEN_REPORTS[@]}"
+    echo "------------------------------------------------------------"
+
+    for KRAKEN_REPORT in "${KRAKEN_REPORTS[@]}"; do
+        PROCESSED=$((PROCESSED + 1))
+
+        SAMPLE="$(basename "$KRAKEN_REPORT" .kraken2.report)"
+
+        BRACKEN_OUTPUT="$ABUNDANCE_DIR/${SAMPLE}.bracken.${TAXONOMIC_LEVEL}.tsv"
+        BRACKEN_REPORT="$BRACKEN_REPORT_DIR/${SAMPLE}.bracken.${TAXONOMIC_LEVEL}.report"
+
+        OUTPUT_TMP="${BRACKEN_OUTPUT}.part"
+        REPORT_TMP="${BRACKEN_REPORT}.part"
+
+        LOG="$LOG_DIR/${SAMPLE}.bracken.log"
+        DONE="$STATUS_DIR/${SAMPLE}.done"
+
+        echo
+        echo "[$PROCESSED/$TOTAL] $COHORT/$SAMPLE"
+
+        # Skip successfully completed samples
+        if [[ -f "$DONE" &&
+              -s "$BRACKEN_OUTPUT" &&
+              -s "$BRACKEN_REPORT" ]]; then
+
+            echo "[SKIP] Already completed."
+
+            SKIPPED=$((SKIPPED + 1))
+            continue
+        fi
+
+        # Check input report
+        if [[ ! -s "$KRAKEN_REPORT" ]]; then
+            echo "[FAIL] Missing or empty Kraken2 report:"
+            echo "       $KRAKEN_REPORT"
+
+            FAILED=$((FAILED + 1))
+            FAILED_SAMPLES+=("$COHORT/$SAMPLE")
+            continue
+        fi
+
+        # Remove stale temporary files from interrupted runs
+        rm -f -- "$OUTPUT_TMP" "$REPORT_TMP"
+
+        # Run Bracken inside a subshell so exit status is captured without
+        # terminating the complete multi-sample pipeline.
+        (
+            echo "Sample:            $SAMPLE"
+            echo "Cohort:            $COHORT"
+            echo "Started:           $(date --iso-8601=seconds)"
+            echo "Kraken report:     $KRAKEN_REPORT"
+            echo "Bracken database:  $DB_DIR"
+            echo "Distribution file: $DISTRIBUTION_FILE"
+            echo "Read length:       $READ_LENGTH"
+            echo "Taxonomic level:   $TAXONOMIC_LEVEL"
+            echo "Threshold:         $THRESHOLD"
+            echo
+
+            bracken \
+                -d "$DB_DIR" \
+                -i "$KRAKEN_REPORT" \
+                -o "$OUTPUT_TMP" \
+                -w "$REPORT_TMP" \
+                -r "$READ_LENGTH" \
+                -l "$TAXONOMIC_LEVEL" \
+                -t "$THRESHOLD"
+
+            BRACKEN_STATUS=$?
+
+            echo
+            echo "Bracken exit status: $BRACKEN_STATUS"
+            echo "Finished: $(date --iso-8601=seconds)"
+
+            exit "$BRACKEN_STATUS"
+        ) >"$LOG" 2>&1
+
+        STATUS=$?
+
+        if [[ $STATUS -eq 0 &&
+              -s "$OUTPUT_TMP" &&
+              -s "$REPORT_TMP" ]]; then
+
+            mv -- "$OUTPUT_TMP" "$BRACKEN_OUTPUT"
+            mv -- "$REPORT_TMP" "$BRACKEN_REPORT"
+
+            : > "$DONE"
+
+            echo "[OK] Abundance table: $BRACKEN_OUTPUT"
+            echo "[OK] Bracken report:  $BRACKEN_REPORT"
+            echo "[OK] Log:             $LOG"
+
+            COMPLETED=$((COMPLETED + 1))
+        else
+            echo "[FAIL] Bracken failed."
+            echo "       Check log: $LOG"
+
+            FAILED=$((FAILED + 1))
+            FAILED_SAMPLES+=("$COHORT/$SAMPLE")
+        fi
+    done
+done
+
+# =============================================================================
+# Final summary
+# =============================================================================
+
+echo
+echo "============================================================"
+echo "Bracken pipeline summary"
+echo "Finished:   $(date --iso-8601=seconds)"
+echo "Total:      $TOTAL"
+echo "Processed:  $PROCESSED"
+echo "Completed:  $COMPLETED"
+echo "Skipped:    $SKIPPED"
+echo "Failed:     $FAILED"
+echo "Master log: $MASTER_LOG"
+echo "============================================================"
+
+if (( FAILED > 0 )); then
+    echo
+    echo "Failed samples:"
+
+    for FAILED_SAMPLE in "${FAILED_SAMPLES[@]}"; do
+        echo "  $FAILED_SAMPLE"
+    done
+
+    exit 1
+fi
+
+echo "Pipeline finished successfully."
+exit 0
+
+Validate and run:
+
+bash -n bracken.sh &&
+chmod +x bracken.sh &&
+./bracken.sh
+
+The header should now show:
+
+Cohorts:           CD UC non_IBD
+
+
+## Human3- Functional Profiling
+
+Version check 
+humann --version
+metaphlan --version
+
+## Downloading database by script downloaddatabase.sh 
+update the paths variables for downloading in different machines : 
+## If the other computer has the same folder structure, change only:
+
+BASE="/path/to/Metagenomics"
+
+This automatically updates the input, output, and database paths.
+
+If its databases are stored elsewhere, also change:
+
+DB="/actual/path/to/databases"
+
+The sample command uses explicit database flags, so updating HUMAnN’s saved configuration is not required.
+
+To save those locations as defaults on the new computer, run inside its human environment:
+
+humann_config --update database_folders nucleotide "$DB/chocophlan"
+humann_config --update database_folders protein "$DB/uniref"
+humann_config --update database_folders utility_mapping "$DB/utility_mapping"
+The paths to nucleotide , protein database
+
+
+
+
+## Task export the human.yml config
+conda activate human
+
+##Demo command
+BASE="/home/bioinfo/Desktop/Data_5TB/Metagenomics"
+DB="$BASE/HUMAnN3/databases"
+SAMPLE="SRR6468499"
+
+mkdir -p "$BASE/HUMAnN3/input"
+
+# Concatenate mates; original files remain unchanged.
+cat "$BASE/omics_logic/UC/${SAMPLE}_kneaddata_paired_1.fastq" \
+    "$BASE/omics_logic/UC/${SAMPLE}_kneaddata_paired_2.fastq" \
+    > "$BASE/HUMAnN3/input/${SAMPLE}.fastq"
+
+humann \
+    --input "$BASE/HUMAnN3/input/${SAMPLE}.fastq" \
+    --output "$BASE/HUMAnN3/results/$SAMPLE" \
+    --threads 64 \
+    --nucleotide-database "$DB/chocophlan" \
+    --protein-database "$DB/uniref" \
+    --metaphlan-options "-t rel_ab --offline --bowtie2db $DB/metaphlan --index mpa_vJun23_CHOCOPhlAnSGB_202403"
+The main results will be ${SAMPLE}_genefamilies.tsv, ${SAMPLE}_pathabundance.tsv, and ${SAMPLE}_pathcoverage.tsv. Your original FASTQ files remain unchanged.
+##We can inspect the saved settings with:
+humann_config --print
+## setting paths
+
+##HUMAnN and MetaPhlAn manage their database locations separately there we need to pass the --metaphlan-options  flag to specify the metaphlan marker database
+
+The script saves ChocoPhlAn, UniRef90, and utility-mapping paths in HUMAnN’s configuration using humann_config. HUMAnN therefore remembers where they are.
+
+The MetaPhlAn markers belong to MetaPhlAn, which HUMAnN launches as a separate program. Since you downloaded them into a custom folder, you must tell MetaPhlAn:
+
+--bowtie2db: where the marker database is stored.
+--index: which database release to use—specifically vJun23, compatible with HUMAnN 3.9.
+
+HUMAnN passes these settings through --metaphlan-options.
+
+You only download the markers once; specifying their path on later runs does not download them again.
+
+HUMAnN on shotgun metagenomic DNA estimates the community’s functional potential—not necessarily which pathways are actively expressed. Demonstrating active metabolism requires metatranscriptomics, metaproteomics, or metabolomics.
+##check the available databases
+humann_databases --available
+Note: HUMAnN accepts only a single FASTQ file as input. Therefore, paired-end reads (R1 and R2) must be concatenated into one FASTQ file before running HUMAnN. In this workflow, the concatenation is performed using the host-removed reads generated by KneadData.
+## omicslogic
+humann   
+--input SRR6468537_clean.fastq   
+--output humann_output/   
+--threads 16   
+--nucleotide-database /home/omicslogic/Shotgun_metagenomics/humann_db/chocophlan   
+--protein-database /home/omicslogic/Shotgun_metagenomics/humann_db/uniref   
+--metaphlan-options "--offline --bowtie2db /home/omicslogic/Shotgun_metagenomics/metaphlan_db_jun23 
+--index mpa_vJun23_CHOCOPhlAnSGB_202403"
+Parameter explanations:
+
+--input: Your QC'd, host-removed reads (can be FASTQ or FASTA)
+--output: Output directory (will create if it doesn't exist)
+--nucleotide-database: Path to ChocoPhlAn
+--protein-database: Path to UniRef90
+--threads 16: Number of CPU cores (adjust to your system)
+--memory-use maximum: Use maximum RAM for speed
+--verbose: Show progress messages
+
+
+HUMAnN3 uses this two-stage alignment strategy to combine speed, taxonomic precision, and sensitivity:
+
+
+## Installation : conda install -c conda-forge -c bioconda python=3.12 humann=3.9 metaphlan=4.1.1
+
+
+For HUMAnN 3, download ChocoPhlAn and UniRef90 using humann_databases. The MetaCyc reaction and pathway files are already bundled with HUMAnN 3; they need no separate download. Developer confirmation.
+
+First, activate your environment and confirm the installed version:
+
+conda activate metagenomics
+
+humann --version
+humann_databases --available
+
+Ensure the version is 3.x before downloading, because the downloader selects databases associated with its installed software release.
+
+Use a database folder beside your kraken2db:
+
+HUMANN_DB="/home/bioinfo/Desktop/Data_5TB/Metagenomics/humann3_db"
+
+mkdir -p "$HUMANN_DB"
+
+Download the full nucleotide database:
+
+humann_databases --download chocophlan full "$HUMANN_DB"
+
+Download the full UniRef90 DIAMOND protein database:
+
+humann_databases --download uniref uniref90_diamond "$HUMANN_DB"
+
+These commands download, extract, and automatically update HUMAnN’s database configuration. Official download instructions.
+
+Also download the utility mappings for later regrouping gene families into EC numbers, GO terms, and other annotations:
+
+humann_databases --download utility_mapping full "$HUMANN_DB"
+
+Utility mappings support annotation and postprocessing; they are separate from the bundled MetaCyc pathway definitions. Official database guidance.
+
+Your download directory will contain:
+
+humann3_db/
+├── chocophlan/
+├── uniref/
+└── utility_mapping/
+
+Verify the configured paths:
+
+humann_config --print
+
+If necessary, explicitly set them:
+
+humann_config --update database_folders nucleotide "$HUMANN_DB/chocophlan"
+humann_config --update database_folders protein "$HUMANN_DB/uniref"
+humann_config --update database_folders utility_mapping "$HUMANN_DB/utility_mapping"
+
+humann_databases --available
+
+
+## Download databases 
+ #!/usr/bin/env bash
+set -Eeuo pipefail
+
+# Optional first argument overrides the database location.
+DB_ROOT="${1:-/home/bioinfo/Desktop/Data_5TB/Metagenomics/HUMAnN3/databases}"
+THREADS=16
+MPA_INDEX="mpa_vJun23_CHOCOPhlAnSGB_202403"
+
+mkdir -p "$DB_ROOT"
+DB_ROOT="$(cd -- "$DB_ROOT" && pwd)"
+
+LOG_DIR="$DB_ROOT/logs"
+STATUS_DIR="$DB_ROOT/status"
+mkdir -p "$LOG_DIR" "$STATUS_DIR" "$DB_ROOT/metaphlan"
+
+LOG="$LOG_DIR/download_$(date '+%Y%m%d_%H%M%S').log"
+exec > >(tee -a "$LOG") 2>&1
+
+trap 'echo "[ERROR] Failed at line $LINENO. See: $LOG"' ERR
+trap 'echo "[STOPPED] Rerun this script to retry unfinished steps."; exit 130' INT
+trap 'echo "[STOPPED] Download terminated."; exit 143' TERM
+
+for TOOL in humann humann_databases humann_config metaphlan bowtie2-build; do
+    command -v "$TOOL" >/dev/null 2>&1 || {
+        echo "ERROR: $TOOL not found. Activate the human environment."
+        exit 1
+    }
+done
+
+echo "=== HUMAnN3 database installation ==="
+echo "Started:   $(date --iso-8601=seconds)"
+echo "Directory: $DB_ROOT"
+echo "Log:       $LOG"
+humann --version
+metaphlan --version
+df -h "$DB_ROOT"
+
+# Successful steps are recorded and skipped on subsequent runs.
+run_step() {
+    local STEP="$1"
+    shift
+    local MARKER="$STATUS_DIR/${STEP}.done"
+
+    if [[ -f "$MARKER" ]]; then
+        echo "[SKIP] $STEP previously completed."
+        return 0
+    fi
+
+    echo
+    echo "[START] $STEP: $(date --iso-8601=seconds)"
+    "$@"
+    touch "$MARKER"
+    echo "[OK] $STEP: $(date --iso-8601=seconds)"
+}
+
+run_step "metaphlan_${MPA_INDEX}" \
+    metaphlan --install \
+    --bowtie2db "$DB_ROOT/metaphlan" \
+    --index "$MPA_INDEX" \
+    --nproc "$THREADS"
+
+run_step "chocophlan_full_v201901_v31" \
+    humann_databases --download chocophlan full "$DB_ROOT"
+
+# Full UniRef90, not the smaller EC-filtered subset.
+run_step "uniref90_full_v201901b" \
+    humann_databases --download uniref uniref90_diamond "$DB_ROOT"
+
+run_step "utility_mapping_full_v201901b" \
+    humann_databases --download utility_mapping full "$DB_ROOT"
+
+# Configure paths explicitly, including when completed steps were skipped.
+humann_config --update database_folders nucleotide "$DB_ROOT/chocophlan"
+humann_config --update database_folders protein "$DB_ROOT/uniref"
+humann_config --update database_folders utility_mapping "$DB_ROOT/utility_mapping"
+
+echo
+humann_config --print
+echo "=== All database installation steps completed ==="
+echo "Finished: $(date --iso-8601=seconds)"
+echo "Log: $LOG"
+
+Run:
+
+conda activate human
+chmod +x download_humann_databases.sh
+./download_humann_databases.sh
+
+Rerunning skips completed steps. An interrupted download may restart from the beginning—this script provides step-level recovery, not guaranteed byte-level resume. Keep the database files alongside their completion markers.
+
+For subsequent HUMAnN runs, explicitly select the marker database using:
+
+--metaphlan-options "-t rel_ab --bowtie2db /home/bioinfo/Desktop/Data_5TB/Metagenomics/HUMAnN3/databases/metaphlan --index mpa_vJun23_CHOCOPhlAnSGB_202403"
+
+
+## Resume the steps: 
+wget -c --tries=20 --timeout=60 --waitretry=5 \
+    --directory-prefix="/home/bioinfo/Desktop/Data_5TB/Metagenomics/HUMAnN3/databases/metaphlan" \
+    "http://cmprod1.cibio.unitn.it/biobakery4/metaphlan_databases/bowtie2_indexes/mpa_vJun23_CHOCOPhlAnSGB_202403_bt2.tar"
+    
+the script downloads ChocoPhlAn and UniRef90, but MetaPhlAn does not use HUMAnN’s full ChocoPhlAn database.
+
+They are separate:
+
+MetaPhlAn marker database: MetaPhlAn uses it to identify species.
+Full ChocoPhlAn: HUMAnN uses species-specific gene catalogs for nucleotide alignment with Bowtie2.
+UniRef90: HUMAnN uses it for protein-level searches with DIAMOND.
+
+The confusion comes from “CHOCOPhlAnSGB” appearing in the MetaPhlAn database name. That marker database and HUMAnN’s full ChocoPhlAn database are different downloads.
+
+## Download script: 2
+download_database_2.sh 
+Everything goes under:
+
+/home/bioinfo/Desktop/Data_5TB/Metagenomics/HUMAnN3/databases/
+├── archives/         # Downloaded archives and checksum files
+├── metaphlan/        # Installed MetaPhlAn vJun23 markers
+├── chocophlan/       # Installed full ChocoPhlAn
+├── uniref/           # Installed UniRef90
+├── utility_mapping/  # Installed annotation mappings
+├── logs/             # Download logs
+├── status/           # Verified installation markers
+└── backups/          # Preserved invalid or replaced files
+#Resume 
+RESUME=1 ./download_database.sh
+
+ ChocoPhlAn, it downloaded and installed two MetaPhlAn files:
+
+mpa_vJun23_CHOCOPhlAnSGB_202403_bt2.tar — approximately 21.41 GiB, containing the Bowtie2 marker indexes.
+mpa_vJun23_CHOCOPhlAnSGB_202403.tar — approximately 3.08 GiB, containing taxonomy/marker metadata, including the .pkl file.
+
+Both belong to the MetaPhlAn marker database. They are separate from the full ChocoPhlAn gene database, which is downloading now.
+
+MetaPhlAn’s database directory:
+MetaPhlAn database directory is:
+
+/home/bioinfo/Desktop/Data_5TB/Metagenomics/HUMAnN3/databases/metaphlan
+
+Use it in your HUMAnN command as:
+
+--metaphlan-options "-t rel_ab --offline --bowtie2db /home/bioinfo/Desktop/Data_5TB/Metagenomics/HUMAnN3/databases/metaphlan --index mpa_vJun23_CHOCOPhlAnSGB_202403"

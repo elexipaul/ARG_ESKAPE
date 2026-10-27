@@ -1,0 +1,25 @@
+Ensemble size and parallelism
+- n_estimators (number of trees) — unlike boosting, more trees in a Random Forest doesn't really risk overfitting, since each tree is independent (trained on its own bootstrap sample) and you're just averaging/voting across more of them. It costs compute, not generalization, past a certain point. This is a genuine structural difference from the LightGBM boosting we used, where more rounds can overfit.
+- n_jobs — trees are independent, so RF parallelizes trivially across cores (unlike boosting, which builds trees sequentially, each one correcting the last).
+
+Individual tree complexity (regularization knobs)
+- max_depth, max_leaf_nodes — how large a single tree is allowed to grow. Two ways of expressing the same underlying limit (depth-based vs. leaf-count-based) — LightGBM's num_leaves is the leaf-count-style version of this.
+- min_samples_split, min_samples_leaf — minimum data required to justify a split, or to form a leaf at all. Higher values smooth the model and reduce fitting to noise in small groups.
+- min_impurity_decrease — a split only happens if it improves purity by at least this much; a direct regularization threshold.
+
+The actual RF-specific mechanism
+- max_features — how many features are considered (randomly) at each split. This is the single most important RF-specific knob, not an afterthought: it's what decorrelates the trees from each other. If max_features = all features, RF degrades toward plain bagging, and averaging many highly-correlated trees buys you much less variance reduction than averaging decorrelated ones. Classic defaults: √(n_features) for classification, n_features/3 for regression.
+- bootstrap / max_samples — whether (and how much of) the data each tree sees is itself a bootstrap resample. This is the other randomization source, alongside max_features — together they're why it's called "random" forest, not just "bagged trees."
+
+Built-in validation — a genuine RF-specific feature
+- Out-of-bag (OOB) score — since each tree only trains on ~63.2% of the data (a property of bootstrap sampling), the remaining ~37% "out-of-bag" per tree can estimate generalization without a separate held-out set or formal cross-validation. Worth knowing as a design option, though for a rigorous comparison across groups — the kind we did throughout this project, with near-duplicate-aware grouping — a proper grouped CV is still the safer standard, since OOB doesn't protect against leakage from near-duplicate sequences the way our grouped splits did.
+
+Class imbalance
+- class_weight ("balanced", "balanced_subsample", or explicit per-class weights) — directly the RF analogue of what we used is_unbalance=True for in the binary models and manual inverse-frequency weighting for in the multiclass one.
+
+Feature importance — the one that should sound familiar
+- RF's native importance is Gini/impurity-based, computed as a free byproduct of training, same category as LightGBM's gain importance. It carries the exact same well-documented bias toward high-cardinality/continuous features that motivated us to treat SHAP as the primary signal rather than trusting impurity/gain alone. If you ever build an RF variant of this classifier, that reasoning carries over directly — don't trust its .feature_importances_ alone.
+
+Two things worth knowing even if not literally "hyperparameters"
+- Bias–variance role: RF's whole mechanism is to grow individual trees deep and low-bias/high-variance, then reduce variance through averaging many decorrelated ones. That's a different lever from what boosting (LightGBM) does, where each tree is shallow and high-bias, and boosting rounds reduce bias incrementally.
+- Categorical features: a plain sklearn-style RF needs categorical variables pre-encoded (one-hot or ordinal); LightGBM, which we actually used, has native categorical support instead. Not an issue for this all-numeric feature pipeline, but relevant if RF were swapped in directly.
